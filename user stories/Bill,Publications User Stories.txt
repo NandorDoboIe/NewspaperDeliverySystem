@@ -1,4 +1,4 @@
-Bill
+Bills
 As a news agent I want to be able to Create new bills in case the automated system missed one.
 As a news agent I want to be able to read existing bills to see which ones I still need to create.
 As a news agent I want to be able to update existing bills to correct any mistakes.
