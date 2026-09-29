@@ -1,8 +1,0 @@
-As a news agent I want to manage customer details such as add, update, delete so that I can keep accurate records for delivery.
-As a newsagent, I want to record which publications each customer receives, so that I know what publications need to be delivered to each customer.
-As a news agent, I want to record when customers are temporarily absent as they will not receive newspaper in specific time.
-
-As a news agent I want to record address and classify them in delivery areas to organise deliveries more effectively.
-As a news agent I want to organise delivery order based on areas to get an efficient route
-As a news agent I want to print delivery list in order, so that each delivery person knows which publications to deliver to each address
-As a news agent I want to update delivery areas and orders so that the system remains accurate when customers are moved or new customers are added

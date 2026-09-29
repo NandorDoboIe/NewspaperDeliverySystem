@@ -1,0 +1,15 @@
+NewsAgent
+
+As an admin I want to create news agent role to handle expension of personal
+As an admin I want to read existing news agents to be able to keep track of them for security reasons
+As an admin I want to update existing news agents to update any changes in information
+As an admin I want to delete news agents in case anyone is fired or retired.
+
+Delivery Area
+
+As a news agent I want to create address and classify them in delivery areas to organise deliveries more effectively.
+As a news agent I want to read addresses and delivery areas so I know where to send delivery persons
+As a news agent I want to update delivery areas and orders so that the system remains accurate when customers are moved or new customers are added
+As a news agent I want to delete delivery areas or addresses in case of cancelations of service
+As a news agent I want to print delivery list in order, so that each delivery person knows which publications to deliver to each address
+
