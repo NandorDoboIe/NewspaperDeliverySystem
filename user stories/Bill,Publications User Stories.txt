@@ -1,10 +1,12 @@
-As a news agent I want to be able to Create new bills incase the automated system missed one.
+Bill
+As a news agent I want to be able to Create new bills in case the automated system missed one.
 As a news agent I want to be able to read existing bills to see which ones I still need to create.
 As a news agent I want to be able to update existing bills to correct any mistakes.
 As a news agent I want to be able to delete existing bills so that the system is not cluttered with already sent out bills.
 
+Publication
 As a news agent I want to be able to create new Publications that the users can order to accommodate growth and the occasion that we get new partnerships.
 As a news agent I want to be able to read existing to Publications so that I can communicate the available options to the customers.
 As a news agent I want to be able to update existing Publications so that I can update any changes to them, either due to incorrect information or changes in their services.
-As a news agent I want to be able to delete any existing Publication in the case the publication is not available anymore.
+As a news agent I want to be able to delete any existing Publication in the case the publication is not available any more.
 As news agent if any of the publications are below 5 in stock I want to get a notification so I can restock them
