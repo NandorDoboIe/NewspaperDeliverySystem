@@ -1,11 +1,11 @@
 Customer
-As a customer, I want to create a new person to deliver newspaper to because my neighbour wants to receive newspapers.
-As a customer, I want to update my personal details so that any deliveries are delivered to me correctly.
-As a customer, I want to be able to see my personal details to ensure if they are correct.
-As a customer, I want to delete my customer account as I no longer wish to receive newspapers regularly.
+As a news agent, I want to create a new customer because a new local customer wants me to deliver newspapers.
+As a news agent, I want to update a customer's details so that any deliveries are delivered to them correctly.
+As a news agent, I want to be able to see a customer's details to ensure if they are correct.
+As a news agent, I want to delete a customer's account as they no longer wish to receive newspapers regularly.
 
 Orders
-As a customer, I want to place an order for newspapers to be delivered to me as I want to receive newspapers regularly.
-As a customer, I want to be able to see what publications I am receiving because I want to remind myself of publications I am getting.
-As a customer, I want to update my order because I have changed my mind on what publication to receive.
-As a customer, I want to delete my order as I accidentally ordered a publication.
+As a news agent, I want to place an order for newspapers to be delivered as the customer has asked to receive newspapers regularly.
+As a news agent, I want to be able to see what publications the customer is receiving because I want to remind myself of what publications they ordered.
+As a news agent, I want to update an order because a customer has changed their mind on what publication to receive.
+As a news agent, I want to delete an order as the customer accidentally ordered a publication.
