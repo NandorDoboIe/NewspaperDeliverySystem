@@ -1,0 +1,12 @@
+Iterative Model Justification
+
+We are choosing an iterative development model for our Newspaper Delivery system. We are a team of 4 students working together for the first time. 
+An iterative approach allows us to build in smaller stages so we can review and improve as we code.
+
+We believe we will encounter additional requirements or attributes that the finished product may need.
+There may be alternative ways to implement the requirements.
+
+Every increment we make to the system will allow us to review the features, find ways we can improve on them and improve them if we can. (Successfully)
+Iterative model is also appropriate for our team as we develop an understanding of our strengths and weaknesses as well as our communication styles.
+
+The option of the Waterfall model is also viable as there was a lot of detail provided from the client.
