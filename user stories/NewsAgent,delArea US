@@ -13,3 +13,9 @@ As a news agent I want to update delivery areas and orders so that the system re
 As a news agent I want to delete delivery areas or addresses in case of cancelations of service
 As a news agent I want to print delivery list in order, so that each delivery person knows which publications to deliver to each address
 
+Acceptance Criteria
+
+NewsAgent
+Admin can enter required details to create news agent added to system.
+Each news agent will have their own unique id including details such as username and contact.
+System should display alert if information entered being invalid.
