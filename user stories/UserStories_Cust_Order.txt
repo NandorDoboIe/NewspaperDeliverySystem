@@ -8,7 +8,7 @@ Orders
 1.As a news agent, I want to place an order for newspapers to be delivered as the customer has asked to receive newspapers regularly.
 2.As a news agent, I want to be able to see what publications the customer is receiving because I want to remind myself of what publications they ordered.
 3.As a news agent, I want to update an order because a customer has changed their mind on what publication to receive.
-As a news agent, I want to delete an order as the customer accidentally ordered a publication.
+4.As a news agent, I want to delete an order as the customer accidentally ordered a publication.
 
 AC:
 Cust:
