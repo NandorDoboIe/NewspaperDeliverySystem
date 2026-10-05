@@ -21,7 +21,7 @@ Cust:
   The system has to allow changes to details.
   The updated details should be displayed when selected again.
   The system should display a confirmation alert to confirm that the update was successful.
-3.If customer exists in the system, the user selects a customer, their details are displayed.
+3.If customer exists in the system, the user selects a customer and their details are displayed.
   The displayed info should be; CustID, name, address and contact details.
   The details displayed must match the information stored.
   If the customer does not exist, the system should display an alert.
@@ -30,3 +30,20 @@ Cust:
   The deleted customer should no longer appear in the system.
   The system should display confirmation that the customer was successfully deleted.
   If the user tries to delete a customer who does not exist, an error message should display.
+Order:
+1.User creates an order and selects the requested publication(s), then the order is saved and associated with the requesting customer.
+  An order needs to contain a valid customer and a valid publication.
+  The system should assign a unique order ID.
+  The system should not continue in making a new order if required info is missing.
+  The system should display a confirmation message when the order is successfully created.
+2.The User selects the customer's account. The account shows all ordered publications for the customer.
+  Each order should display info such as the publication name and order details.
+  Orders only belonging to the selected customer should be displayed.
+  If the customer has no orders, the system should indicate that no orders exist.
+3.The user selects an existing order. They update the publication and save the changes. The order change should be saved.
+  The updated info should be displayed when the order is viewed again.
+  The system should display a confirmation message that the order was successfully updated.
+4.The user chooses to delete an existing order, confirm the deletion and check the order is removed.
+  The system should ask for confirmation before deleting the order.
+  The deleted order should no longer appear in the customer's orders.
+  The system should display a confirmation message that the order was successfully deleted.
