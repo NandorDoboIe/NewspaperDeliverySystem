@@ -19,3 +19,8 @@ NewsAgent
 Admin can enter required details to create news agent added to system.
 Each news agent will have their own unique id including details such as username and contact.
 System should display alert if information entered being invalid.
+
+Delivery Area
+Admin can select and edit address' delivery area or order then save updated info.
+Delivery list should be displayed according to their assigned delivery order.
+Each address will assigned to id that linked to specific areas
