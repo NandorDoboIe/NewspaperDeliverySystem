@@ -1,0 +1,28 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class CustomerTest {
+
+	@Test
+	public void testCusName() {
+		Customer customer = new Customer("John Doe","Dublin",871234567);
+		
+		assertEquals("John Doe", customer.getName());
+	}
+	
+	@Test
+	public void testCusAddress() {
+		Customer customer = new Customer("John Doe","Dublin",871234567);
+		
+		assertEquals("Dublin", customer.getAddress());
+	}
+	
+	@Test
+	public void testCusPn() {
+		Customer customer = new Customer("John Doe","Dublin",871234567);
+		
+		assertEquals(871234567, customer.getPhoneNumber());
+	}
+
+}
