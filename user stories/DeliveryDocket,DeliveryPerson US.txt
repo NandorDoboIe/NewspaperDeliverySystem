@@ -1,0 +1,33 @@
+delivery docket
+As a news agent I want to create a new docket to hand out to delivery person
+Given that the user is logged in they will be able to create a new delivery docket for the specified region it will be given a unique docket ID
+Given the user inputs invalid data an error will be provided
+
+As a news agent I want to read a delivery docket to insure the information is correct
+Given that the user is logged in they can veiw all the existing delivery dockets and the data in it
+
+As a news agent I want to update a delivery docket to add any changes that may occur
+Given that the user is logged in they will be able to update the data if the feilds are valid the data will then be saved to the database
+Given the user edits the delivery docket and invalid data is provided the user will receive an error
+
+As a news agent I want to delete a delivery docket to remove previously delivered dockets
+Given the user is logged in they will be able to delete dockets the system will ask for confirmation before deleting
+If the user confirms the deletion the docket will be removed from the database
+
+
+delivery person
+As a news agent I want to create a delivery person in case the company expands
+Given the user is logged in a new delivery person can be created with the correct data the delivery person will be given a unique delivery person ID
+Given the user inputs invalid data an error will be provided
+
+As a news agent I want to read a delivery person to insure the information is correct
+The system can read the delivery person to see if a user exists when logging in
+Given the user is logged in the information of existing delivery people can be veiwed
+
+As a news agent I want to update a delivery person to correct any mistakes
+Given the user is logged in the delivery person can be updated if all the fields are valid
+If the feilds are invalid the user will receive an error
+
+As a news agent I want to delete a delivery person when an employee retires or leaves
+Given the user is logged in they will receive a confirm to delete the delivery person
+Given the user confirms the deletion the delivery person will be deleted

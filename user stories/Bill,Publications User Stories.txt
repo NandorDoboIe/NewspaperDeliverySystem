@@ -5,7 +5,7 @@ Given I am logged in as a news agent, when I click on the option to create a new
 Given i am creating a new bill,when I leave a required field empty, then the system blocks the submission and notifies the user the field is missing
 
 As a news agent I want to be able to read existing bills to see which ones I still need to create.
-Given I am logged in as a news agent or delivery person, when I open the bills, then I see a list of all existing bliss with key details.
+Given I am logged in as a news agent or delivery person, when I open the bills, then I see a list of all existing bills with key details.
 
 As a news agent I want to be able to update existing bills to correct any mistakes.
 Given an existing bill, when I edit an allowed field and save, then the changes are saved and updated to the database
