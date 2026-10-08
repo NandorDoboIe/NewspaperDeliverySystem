@@ -1,89 +1,40 @@
-import static org.junit.jupiter.api.Assertions.*;
+public class Order {
 
-import org.junit.jupiter.api.Test;
+    private int orderID;
+    private int customerID;
+    private int publicationID;
+    private boolean[] deliveryPattern;
 
-class OrderTest {
+    public Order(int orderID, int customerID,
+                 int publicationID, boolean[] deliveryPattern) {
 
-    @Test
-    public void testOrderID() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertEquals(1, order.getOrderID());
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.publicationID = publicationID;
+        this.deliveryPattern = deliveryPattern;
     }
 
-
-    @Test
-    public void testCustomerID() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertEquals(101, order.getCustomerID());
+    public int getOrderID() {
+        return orderID;
     }
 
-
-    @Test
-    public void testPublicationID() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertEquals(201, order.getPublicationID());
+    public int getCustomerID() {
+        return customerID;
     }
 
-
-    @Test
-    public void testDeliveryPattern() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertArrayEquals(pattern, order.getDeliveryPattern());
+    public int getPublicationID() {
+        return publicationID;
     }
 
-
-    @Test
-    public void testMondayDelivery() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertTrue(order.getDeliveryPattern()[0]);
+    public boolean[] getDeliveryPattern() {
+        return deliveryPattern;
     }
 
-
-    @Test
-    public void testWednesdayNoDelivery() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertFalse(order.getDeliveryPattern()[2]);
+    public void setPublicationID(int publicationID) {
+        this.publicationID = publicationID;
     }
 
-
-    @Test
-    public void testSundayNoDelivery() {
-        boolean[] pattern =
-            {true, true, false, true, true, false, false};
-
-        Order order =
-            new Order(1, 101, 201, pattern);
-
-        assertFalse(order.getDeliveryPattern()[6]);
+    public void setDeliveryPattern(boolean[] deliveryPattern) {
+        this.deliveryPattern = deliveryPattern;
     }
 }
