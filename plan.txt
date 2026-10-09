@@ -1,22 +1,22 @@
 We decided on operating on a basis of 2 increment per week running concurrently, split between the group so 2 people responsible for 1 increment. Each increment will have its own branch.
 
 Week 6
-Increment 1 - Customer TDD fully completed (10 hours - Jan(5) Nandor(2))
+Increment 1 - Customer TDD fully completed (7 hours - Jan(5) Nandor(2))
 Increment 2 - Orders TDD fully completed(10 hours - Ian(5) Kaixin(5))
 Database management - Nandor(3 hours)
 
 Week 7
-Increment 3 - Delivery Area TDD fully completed (10 hours - Jan(5) Nandor(2))
+Increment 3 - Delivery Area TDD fully completed (7 hours - Jan(5) Nandor(2))
 Increment 4 - Delivery Docket TDD fully completed(10 hours - Ian(5) Kaixin(5))
 Database management - Nandor(3 hours)
 
 Week 8
-Increment 5 - Publications TDD fully completed (10 hours - Jan(5) Nandor(2))
+Increment 5 - Publications TDD fully completed (7 hours - Jan(5) Nandor(2))
 Increment 6 - Users TDD fully completed(10 hours - Ian(5) Kaixin(5))
 Database management - Nandor(3 hours)
 
 Week 9
-Increment 7 - Bill TDD fully completed (10 hours - Jan(5) Nandor(2))
+Increment 7 - Bill TDD fully completed (7 hours - Jan(5) Nandor(2))
 Increment 8 - Holidays TDD fully completed(10 hours - Ian(5) Kaixin(5))
 Database management - Nandor(3 hours)
 
