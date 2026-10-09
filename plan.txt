@@ -2,15 +2,15 @@ We decided on operating on a basis of 2 increment per week running concurrently,
 
 Week 6
 Increment 1 - Customer TDD fully completed (7 hours - Jan(5) Nandor(2))
-Make Unit tests - 1 hours
+Make Unit tests - 2 hours
 Make Code - 4 hours
-Debugging - 3 hours
+Debugging - 2 hours
 (simpler class is the reason for reduced time estimates)
 
 Increment 2 - Orders TDD fully completed(10 hours - Ian(5) Kaixin(5))
-Make Unit tests - 1 hours
+Make Unit tests - 2 hours
 Make Code - 5 hours
-Debugging - 4 hours
+Debugging - 3 hours
 
 Database management - Nandor(3 hours)
 Creating of tables for classes - 1 hour
