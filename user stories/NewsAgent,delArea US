@@ -16,13 +16,37 @@ As a news agent I want to print delivery list in order, so that each delivery pe
 Acceptance Criteria
 
 NewsAgent
-Admin can enter required details to create news agent added to system where each news agent will have their own unique id including details such as username and contact，system should display alert if information entered being successful or invalid.
-Admin can select existing news agent for their details displayed which include id, name, address and contact that all stored in the system, error alert will display if news agent does not exist.
-Admin can edit and save details of existing news agent, updated details should be displayed when the news agent is selected again and invalid information or empty fields shoud display error alert.
-Admin can delete selected news agent's account as they should no longer appear in the system, error message will display if news agent deleted does not exist.
+1. Admin enters all required details and creates a news agent, then the news agent will be added to the system.
+The news agent will have a unique id.
+Required fields such as name, address and contact details must not be empty.
+The system should display a confirmation alert when the news agent is successfully created.
+Invalid information should display an error alert.
 
+2. Admin selects an existing news agent, then their details are displayed.
+The displayed information should include id, name, address and contact details.
+The details displayed must match the information stored in the system.
+If the news agent does not exist, the system should display an error alert.
+
+3. Admin selects a news agent and edits their details, then the updated information is saved.
+The system has to allow changes to the news agent's details.
+Required fields must not be empty when updating the information.
+The updated details should be displayed when the news agent is selected again.
+The system should display a confirmation alert to confirm that the update was successful.
+Invalid information should display an error alert.
+
+4. Admin selects a news agent's account to delete.
+A confirmation message should display to confirm the deletion.
+The deleted news agent should no longer appear in the system.
+The system should display confirmation that the news agent was successfully deleted.
+If the admin tries to delete a news agent who does not exist, an error message should display.
 
 Delivery Area
-Admin can select and edit address' delivery area or order then save updated info.
+1. Admin enters all required address details and creates an address, then the address will be added to the system.
+The address will have a unique id.
+Required fields such as address, town and delivery area must not be empty.
+The news agent should be able to assign the address to an existing delivery area.
+The system should display a confirmation alert when the address is successfully created.
+Invalid information should display an error alert.
+
 Delivery list should be displayed according to their assigned delivery order.
 Each address will assigned to id that linked to specific areas
