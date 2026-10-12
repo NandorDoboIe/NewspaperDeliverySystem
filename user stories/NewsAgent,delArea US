@@ -16,9 +16,11 @@ As a news agent I want to print delivery list in order, so that each delivery pe
 Acceptance Criteria
 
 NewsAgent
-Admin can enter required details to create news agent added to system.
-Each news agent will have their own unique id including details such as username and contact.
-System should display alert if information entered being invalid.
+Admin can enter required details to create news agent added to system where each news agent will have their own unique id including details such as username and contact，system should display alert if information entered being successful or invalid.
+Admin can select existing news agent for their details displayed which include id, name, address and contact that all stored in the system, error alert will display if news agent does not exist.
+Admin can edit and save details of existing news agent, updated details should be displayed when the news agent is selected again and invalid information or empty fields shoud display error alert.
+Admin can delete selected news agent's account as they should no longer appear in the system, error message will display if news agent deleted does not exist.
+
 
 Delivery Area
 Admin can select and edit address' delivery area or order then save updated info.
