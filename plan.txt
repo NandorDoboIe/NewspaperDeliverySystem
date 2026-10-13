@@ -2,28 +2,24 @@ We decided on operating on a basis of 2 increment per week running concurrently,
 
 Week 6
 Increment 1 - Customer TDD fully completed (7 hours - Jan(5) Nandor(2))
-Make Unit tests - 2 hours (Nandor)
-Make Code - 3 hours (Jan)
-Create 
-Read
-Update
-Delete
-Debugging - 2 hours (Jan)
+Customer User Story - Nandor 1h
+Customer Test Design - Nandor 1h
+Customer Product Skeleton - Jan 1h 
+Complete Customer Class - Jan 3h
+Debugging - Jan 1h
 (simpler class is the reason for reduced time estimates)
 
 Increment 2 - Orders TDD fully completed(10 hours - Ian(5) Kaixin(5))
-Make Unit tests - 2 hours 
-Make Code - 5 hours
-Create 
-Read
-Update
-Delete
-....
-Debugging - 3 hours
+Customer User Story - 1h
+Customer Test Design -  2h 
+Customer Product Skeleton - 2h 
+Complete Customer Class - 3h
+Debugging - 2h
 
 Database management - Nandor(3 hours)
+Database connection setup - 1h hour
 Creating of tables for classes - 1 hour
-DAO - 2 hours
+DAO - 1 hour
 
 Week 7
 Increment 3 - Delivery Area TDD fully completed (7 hours - Jan(5) Nandor(2))
