@@ -48,5 +48,18 @@ The news agent should be able to assign the address to an existing delivery area
 The system should display a confirmation alert when the address is successfully created.
 Invalid information should display an error alert.
 
-Delivery list should be displayed according to their assigned delivery order.
-Each address will assigned to id that linked to specific areas
+2. Customer information should include id, name, address and contact.
+Delivery area information should include id and location.
+The system should display the stored information accurately.
+The system should allow the news agent to view customers assigned to a particular delivery area.
+If the selected customer or delivery area does not exist, an error alert should be displayed.
+
+3.When news agent selects a delivery area or order and edits its details, the updated information is then saved.
+The system should allow changes to location.
+The system should allow changes to an order's publication_id, customer_id and pattern.
+The selected customer and publication must exist in their respective tables.
+The updated details should be displayed when the record is selected again.
+The system should display a confirmation alert when the update is successful.
+Invalid information should display an error alert.
+
+4. 
