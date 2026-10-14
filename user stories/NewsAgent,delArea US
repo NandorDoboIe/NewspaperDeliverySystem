@@ -1,47 +1,15 @@
-NewsAgent
-
-As an admin I want to create news agent role to handle expension of personal
-As an admin I want to read existing news agents to be able to keep track of them for security reasons
-As an admin I want to update existing news agents to update any changes in information
-As an admin I want to delete news agents in case anyone is fired or retired.
-
 Delivery Area
 
-As a news agent I want to create address and classify them in delivery areas to organise deliveries more effectively.
-As a news agent I want to read addresses and delivery areas so I know where to send delivery persons
-As a news agent I want to update delivery areas and orders so that the system remains accurate when customers are moved or new customers are added
-As a news agent I want to delete delivery areas or addresses in case of cancelations of service
-As a news agent I want to print delivery list in order, so that each delivery person knows which publications to deliver to each address
+As a user I want tsero create address and classify them in delivery areas to organise deliveries more effectively.
+As a user I want to read addresses and delivery areas so I know where to send delivery persons
+As a user I want to update delivery areas and orders so that the system remains accurate when customers are moved or new customers are added
+As a user I want to delete delivery areas or addresses in case of cancelations of service
+As a user I want to print delivery list in order, so that each delivery person knows which publications to deliver to each address
 
 Acceptance Criteria
 
-NewsAgent
-1. Admin enters all required details and creates a news agent, then the news agent will be added to the system.
-The news agent will have a unique id.
-Required fields such as name, address and contact details must not be empty.
-The system should display a confirmation alert when the news agent is successfully created.
-Invalid information should display an error alert.
-
-2. Admin selects an existing news agent, then their details are displayed.
-The displayed information should include id, name, address and contact details.
-The details displayed must match the information stored in the system.
-If the news agent does not exist, the system should display an error alert.
-
-3. Admin selects a news agent and edits their details, then the updated information is saved.
-The system has to allow changes to the news agent's details.
-Required fields must not be empty when updating the information.
-The updated details should be displayed when the news agent is selected again.
-The system should display a confirmation alert to confirm that the update was successful.
-Invalid information should display an error alert.
-
-4. Admin selects a news agent's account to delete.
-A confirmation message should display to confirm the deletion.
-The deleted news agent should no longer appear in the system.
-The system should display confirmation that the news agent was successfully deleted.
-If the admin tries to delete a news agent who does not exist, an error message should display.
-
 Delivery Area
-1. Admin enters all required address details and creates an address, then the address will be added to the system.
+1. User enters all required address details and creates an address, then the address will be added to the system.
 The address will have a unique id.
 Required fields such as address, town and delivery area must not be empty.
 The news agent should be able to assign the address to an existing delivery area.
@@ -51,10 +19,10 @@ Invalid information should display an error alert.
 2. Customer information should include id, name, address and contact.
 Delivery area information should include id and location.
 The system should display the stored information accurately.
-The system should allow the news agent to view customers assigned to a particular delivery area.
+The system should allow user to view customers assigned to a particular delivery area.
 If the selected customer or delivery area does not exist, an error alert should be displayed.
 
-3.When news agent selects a delivery area or order and edits its details, the updated information is then saved.
+3.When user selects a delivery area or order and edits its details, the updated information is then saved.
 The system should allow changes to location.
 The system should allow changes to an order's publication_id, customer_id and pattern.
 The selected customer and publication must exist in their respective tables.
@@ -62,4 +30,19 @@ The updated details should be displayed when the record is selected again.
 The system should display a confirmation alert when the update is successful.
 Invalid information should display an error alert.
 
-4. 
+4. When user selects delivery area or addresses to delete, a confirmation should be displayed before deletion.
+The system should verify that the selected record exists.
+The system should check whether related orders or delivery dockets exist before deleting delivery area or addresses.
+The deleted record should no longer appear in the relevant list.
+The system should display confirmation when deletion is successful.
+If the record does not exist or cannot safely be deleted because of related records, error message should be displayed.
+
+5. User can print out delivery list by selecting delivery information.
+The system should retrieve relevant customers.
+The list should display customer's name and address.
+The system should retrieve the publications associated with each order.
+The list should display publication details.
+The system should use DeliveryDocket to record or retrieve the relevant delivery information.
+Customers without a scheduled delivery should not appear on the delivery list.
+The system should allow user to print the generated delivery list.
+If no deliveries available, the system should display an appropriate message.
