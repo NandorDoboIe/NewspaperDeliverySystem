@@ -158,12 +158,12 @@ public class CustomerTest {
 
     // TC16
     // Test Objective: Verify customer account creation fails with invalid CustomerID
-    // Input(s): "Arnold","Athlone",null,"0872918648"
+    // Input(s): "Arnold","Athlone",0,"0872918648"
     // Expected Output(s): Customer Account not created
     @Test
     void invalidCustomer_TC16(){
         Customer customer = new Customer(); 
-        assertFalse(customer.createCustomer("Arnold","Athlone",null,"0872918648"));
+        assertFalse(customer.createCustomer("Arnold","Athlone",0,"0872918648"));
     }
 
     // TC17
