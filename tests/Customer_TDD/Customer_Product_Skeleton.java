@@ -7,10 +7,10 @@ public class Customer_Product_Skeleton {
      * and is unique
      * 
      * @param customerID Customers ID
-     * @param unique true if the customer ID is unique
+     * @param CustomerIDs List of all the customer IDs
      * @return true if valid, otherwise false
      */
-    public boolean verifyCustomerID(int customerID, boolean unique){
+    public boolean verifyCustomerID(int customerID, int[] CustomerIDs){
         throw new RuntimeException("No Product Written Yet"); //TODO: Implement
     }
 
@@ -38,7 +38,8 @@ public class Customer_Product_Skeleton {
 
     /**
      * Verifies that a customer contact details are
-     * at least one character.
+     * ten characters
+     * and numeric
      * @param contact Customers contact details
      * @return true if valid, otherwise false
      */
@@ -59,21 +60,18 @@ public class Customer_Product_Skeleton {
     /**
      * Creates an customer when all validation rules are satisfied.
      *
-     * @param customerID Customers ID
      * @param name Customers name
      * @param address Customers address
+     * @param customerID Customers ID
      * @param contact Customers contact
-     * @param uniqueCustomerID true if Customer ID is unique
-     * @param saveSuccessful true if the order is saved successfully
      * @return true if customer is created, otherwise false
      */
     public boolean createCustomer(
-            int customerID,
+            
             String name,
             String address,
-            String contact,
-            boolean uniqueCustomerID,
-            boolean saveSuccessful) {
+            int customerID,
+            String contact) {
 
         throw new RuntimeException("No Product Written Yet"); // TODO: Implement
     }
