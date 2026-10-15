@@ -3,18 +3,6 @@ package Customer_TDD;
 public class Customer_Product_Skeleton {
 
     /**
-     * Verifies that a customer ID has been entered
-     * and is unique
-     * 
-     * @param customerID Customers ID
-     * @param CustomerIDs List of all the customer IDs
-     * @return true if valid, otherwise false
-     */
-    public boolean verifyCustomerID(int customerID, int[] CustomerIDs){
-        throw new RuntimeException("No Product Written Yet"); //TODO: Implement
-    }
-
-    /**
      * Verifies that a customer name has
      * at least one character.
      * 
@@ -62,7 +50,6 @@ public class Customer_Product_Skeleton {
      *
      * @param name Customers name
      * @param address Customers address
-     * @param customerID Customers ID
      * @param contact Customers contact
      * @return true if customer is created, otherwise false
      */
@@ -70,7 +57,6 @@ public class Customer_Product_Skeleton {
             
             String name,
             String address,
-            int customerID,
             String contact) {
 
         throw new RuntimeException("No Product Written Yet"); // TODO: Implement

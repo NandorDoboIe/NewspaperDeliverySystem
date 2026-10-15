@@ -65,125 +65,83 @@ public class CustomerTest {
     }
 
     // TC07
-    // Test Objective: Verify the customer ID is accepted when its unique
-    // Input(s): Customer ID = "2", CustomerIDs=[1] 
-    // Expected Output(s): Customer ID accepted
-    @Test
-    void validCustomerID_TC07(){
-        Customer customer = new Customer();
-        int[] ids = {1};
-        assertTrue(customer.verifyCustomerID(2, ids));
-    }
-
-    // TC08
-    // Test Objective: Verify the customer ID is rejected when its not unique
-    // Input(s): Customer ID = "2", CustomerIDs=[1,2] 
-    // Expected Output(s): Error message: Dublicate ID
-    @Test
-    void invalidCustomerID_TC08(){
-        Customer customer = new Customer();
-        int[] ids = {1,2};
-        assertFalse(customer.verifyCustomerID(2, ids));
-    }
-
-    // TC09
     // Test Objective: Verify contact details is accepted when exactly 10 digits
     // Input(s): Contact Details = "0872918648"
     // Expected Output(s): Contact Details Accepted
     @Test
-    void validContact_TC9(){
+    void validContact_TC07(){
         Customer customer = new Customer();
         assertTrue(customer.verifyContact("0872918648"));
     }
 
-    // TC10
+    // TC08
     // Test Objective: Verify contact details is rejected when fewer than 10 digits
     // Input(s): Contact Details = "087291868"
     // Expected Output(s): Error message: Invalid Contact Details
     @Test
-    void invalidContact_TC10(){
+    void invalidContact_TC08(){
         Customer customer = new Customer();
         assertFalse(customer.verifyContact("087291868"));
     }
 
-    // TC11
+    // TC09
     // Test Objective: Verify contact details is rejected when more than 10 digits
     // Input(s): Contact Details = "0872842918648"
     // Expected Output(s): Error message: Invalid Contact Details
     @Test
-    void invalidContact_TC11(){
+    void invalidContact_TC09(){
         Customer customer = new Customer();
         assertFalse(customer.verifyContact("0872842918648"));
     }
 
-    // TC12
+    // TC10
     // Test Objective: Verify contact details is rejected when containing alphabetic characters
     // Input(s): Contact Details = "0872A18648"
     // Expected Output(s): Error message: Invalid Contact Details
     @Test
-    void invalidContact_TC12(){
+    void invalidContact_TC10(){
         Customer customer = new Customer();
         assertFalse(customer.verifyContact("0872A18648"));
     }
 
-    // TC13
+    // TC11
     // Test Objective: Verify customer account is saved to database when all details are valid
-    // Input(s): "Arnold","Athlone",2,"0872918648"
+    // Input(s): "Arnold","Athlone","0872918648"
     // Expected Output(s): Customer Account saved to database successfully
     @Test
-    void validCustomer_TC13(){
+    void validCustomer_TC11(){
         Customer customer = new Customer();
-        assertTrue(customer.createCustomer("Arnold","Athlone",2,"0872918648"));
+        assertTrue(customer.createCustomer("Arnold","Athlone","0872918648"));
+    }
+
+    // TC12
+    // Test Objective: Verify customer account creation fails with invalid first name
+    // Input(s): "","Athlone","0872918648"
+    // Expected Output(s): Customer Account not created
+    @Test
+    void invalidCustomer_TC12(){
+        Customer customer = new Customer();
+        assertFalse(customer.createCustomer("","Athlone","0872918648"));
+    }
+
+    // TC13
+    // Test Objective: Verify customer account creation fails with invalid first name
+    // Input(s): "Arnold","","0872918648"
+    // Expected Output(s): Customer Account not created
+    @Test
+    void invalidCustomer_TC13(){
+        Customer customer = new Customer();
+        assertFalse(customer.createCustomer("Arnold","","0872918648"));
     }
 
     // TC14
-    // Test Objective: Verify customer account creation fails with invalid first name
-    // Input(s): "","Athlone",2,"0872918648"
+    // Test Objective: Verify customer account creation fails with invalid contact details
+    // Input(s): "Arnold","Athlone",""
     // Expected Output(s): Customer Account not created
     @Test
     void invalidCustomer_TC14(){
-        Customer customer = new Customer();
-        assertFalse(customer.createCustomer("","Athlone",2,"0872918648"));
-    }
-
-    // TC15
-    // Test Objective: Verify customer account creation fails with invalid first name
-    // Input(s): "Arnold","",2,"0872918648"
-    // Expected Output(s): Customer Account not created
-    @Test
-    void invalidCustomer_TC15(){
-        Customer customer = new Customer();
-        assertFalse(customer.createCustomer("Arnold","",2,"0872918648"));
-    }
-
-    // TC16
-    // Test Objective: Verify customer account creation fails with invalid CustomerID
-    // Input(s): "Arnold","Athlone",0,"0872918648"
-    // Expected Output(s): Customer Account not created
-    @Test
-    void invalidCustomer_TC16(){
         Customer customer = new Customer(); 
-        assertFalse(customer.createCustomer("Arnold","Athlone",0,"0872918648"));
-    }
-
-    // TC17
-    // Test Objective: Verify customer account creation fails with dublicate CustomerID
-    // Input(s): "Arnold","Athlone",2,"0872918648"
-    // Expected Output(s): Customer Account not created
-    @Test
-    void invalidCustomer_TC17(){
-        Customer customer = new Customer(); 
-        assertFalse(customer.createCustomer("Arnold","Athlone",2,"0872918648"));
-    }
-
-    // TC18
-    // Test Objective: Verify customer account creation fails with invalid contact details
-    // Input(s): "Arnold","Athlone",2,""
-    // Expected Output(s): Customer Account not created
-    @Test
-    void invalidCustomer_TC18(){
-        Customer customer = new Customer(); 
-        assertFalse(customer.createCustomer("Arnold","Athlone",2,""));
+        assertFalse(customer.createCustomer("Arnold","Athlone",""));
     }
 
 }

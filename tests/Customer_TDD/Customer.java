@@ -5,27 +5,7 @@ public class Customer {
 
     private String name;
     private String address;
-    private int customerID;
     private String contact;
-    /**
-     * Verifies that a customer ID has been entered
-     * and is unique
-     * 
-     * @param customerID Customers ID
-     * @param CustomerIDs List of all the customer IDs
-     * @return true if valid, otherwise false
-     */
-    public boolean verifyCustomerID(int customerID, int[] CustomerIDs){
-        if(customerID < 1){
-            return false;
-        }
-        for(int id : CustomerIDs){
-            if(customerID == id){
-                return false;
-            }
-        }
-        return true;
-    }
 
     /**
      * Verifies that a customer name has
@@ -78,7 +58,6 @@ public class Customer {
      *
      * @param name Customers name
      * @param address Customers address
-     * @param customerID Customers ID
      * @param contact Customers contact
      * @return true if customer is created, otherwise false
      */
@@ -86,17 +65,13 @@ public class Customer {
             
             String name,
             String address,
-            int customerID,
             String contact) {
         
-        int[] placeholder = {1,2};
         if(this.verifyName(name)
         && this.verifyAddress(address)
-        && this.verifyCustomerID(customerID, placeholder)
         && this.verifyContact(contact)){
             this.name = name;
             this.address = address;
-            this.customerID = customerID;
             this.contact = contact;
             return true;
         }
