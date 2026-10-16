@@ -52,10 +52,10 @@ public class Customer {
     public boolean verifySave(boolean saveSuccessful) {
         return saveSuccessful;
     }
-
+    
     /**
      * Creates an customer when all validation rules are satisfied.
-     *
+     * 
      * @param name Customers name
      * @param address Customers address
      * @param contact Customers contact
