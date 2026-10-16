@@ -1,3 +1,10 @@
+User
+
+As an admin I want to create user role to handle expension of personal
+As an admin I want to read existing users to be able to keep track of them for security reasons
+As an admin I want to update existing users to update any changes in information
+As an admin I want to delete users in case anyone is fired or retired.
+
 Delivery Area
 
 As a user I want tsero create address and classify them in delivery areas to organise deliveries more effectively.
@@ -7,6 +14,31 @@ As a user I want to delete delivery areas or addresses in case of cancelations o
 As a user I want to print delivery list in order, so that each delivery person knows which publications to deliver to each address
 
 Acceptance Criteria
+
+User
+1. Admin enters all required details and creates a user, then the user will be added to the system.
+The user will have a unique id.
+Required fields such as name, address and contact details must not be empty.
+The system should display a confirmation alert when the user is successfully created.
+Invalid information should display an error alert.
+
+2. Admin selects an existing user, then their details are displayed.
+The displayed information should include id, name, address and contact details.
+The details displayed must match the information stored in the system.
+If the user does not exist, the system should display an error alert.
+
+3. Admin selects a user and edits their details, then the updated information is saved.
+The system has to allow changes to the user's details.
+Required fields must not be empty when updating the information.
+The updated details should be displayed when the user is selected again.
+The system should display a confirmation alert to confirm that the update was successful.
+Invalid information should display an error alert.
+
+4. Admin selects a user's account to delete.
+A confirmation message should display to confirm the deletion.
+The deleted user should no longer appear in the system.
+The system should display confirmation that the user was successfully deleted.
+If the admin tries to delete a user who does not exist, an error message should display.
 
 Delivery Area
 1. User enters all required address details and creates an address, then the address will be added to the system.
