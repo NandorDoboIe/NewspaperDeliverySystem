@@ -7,8 +7,8 @@ import Database.DAO;
 public class testConnection {
     public static void main(String[] args) {
 
-        Customer customer = new Customer("Jane", "Doe", "12 High Street", "0871234567");
-        Customer updateCustomer = new Customer("wfawv","adwad","asdwad","0871234567");
+        Customer customer = new Customer("Jane Doe", "12 High Street", "0871234567");
+        Customer updateCustomer = new Customer("wfawv", "asdwad", "0871234567");
 
         DAO dao = new DAO();
         boolean success = dao.addData("customer", customer);
@@ -20,7 +20,7 @@ public class testConnection {
         if (success) {
             System.out.println("Customer inserted successfully.");
             for(LinkedHashMap<String,Object> row: table) {
-            	System.out.println(row.get("customerId")+"-"+row.get("firstName")+"....");
+            	System.out.println(row.get("customerId")+"-"+row.get("name")+"....");
             }
         } else {
             System.out.println("Insert failed.");
