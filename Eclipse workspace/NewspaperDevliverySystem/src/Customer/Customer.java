@@ -6,17 +6,15 @@ import java.util.LinkedHashMap;
 public class Customer implements DataProvider{
 
 	private int customerId;
-	private String firstName;
-	private String surname;
+	private String name;
 	private String address;
 	private String phoneNumber;
 
 	public Customer() {
 	}
 
-	public Customer(String firstName, String surname, String address, String phoneNumber) {
-		this.firstName = firstName;
-		this.surname = surname;
+	public Customer(String name, String address, String phoneNumber) {
+		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 	}
@@ -29,20 +27,12 @@ public class Customer implements DataProvider{
 		this.customerId = customerId;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getAddress() {
@@ -63,14 +53,13 @@ public class Customer implements DataProvider{
 
 	@Override
 	public String toString() {
-		return "Customer ID: " + customerId + "\nFirst Name: " + firstName + "\nSurname: " + surname + "\nAddress: "
+		return "Customer ID: " + customerId + "\nName: " + name + "\nAddress: "
 				+ address + "\nPhone Number: " + phoneNumber;
 	}
 	
 	public LinkedHashMap<String,Object> getData(){
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
-		data.put("firstName",this.getFirstName());
-		data.put("surName",this.getSurname());
+		data.put("name",this.getName());
 		data.put("address",this.getAddress());
 		data.put("phoneNumber",this.getPhoneNumber());
 		return data;
