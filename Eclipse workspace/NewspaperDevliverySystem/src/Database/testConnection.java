@@ -1,8 +1,8 @@
-package Customer;
+package Database;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import Database.DAO;
+import Customer.Customer;
 
 public class testConnection {
     public static void main(String[] args) {

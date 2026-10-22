@@ -1,7 +1,6 @@
 package Database;
 import java.sql.Connection;
-import Customer.DataProvider;
-import Customer.DatabaseConnection;
+
 import Customer.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +11,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import Customer.DatabaseConnection;
 
 public class DAO {
 	

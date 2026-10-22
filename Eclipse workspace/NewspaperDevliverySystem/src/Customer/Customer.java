@@ -3,6 +3,8 @@ package Customer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import Database.DataProvider;
+
 public class Customer implements DataProvider{
 
 	private int customerId;
