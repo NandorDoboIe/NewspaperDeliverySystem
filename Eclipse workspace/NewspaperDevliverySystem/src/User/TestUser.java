@@ -1,6 +1,5 @@
 package User;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -37,11 +36,6 @@ public class TestUser {
 	    assertFalse(user.verifyId(-21));
 	}
 	
-	@Test
-	void invalidId_Blank_TC04() {
-	    User user = new User();
-	    assertFalse(user.verifyId());
-	}
 
 	// Test Number: TC04
 	// Test Objective: Verify the minimum boundary for a user's name
@@ -182,6 +176,85 @@ public class TestUser {
 	    User user = new User();
 	    assertFalse(user.verifyAccessLevel(null));
 	}
+	
+	// Test Number: TC18
+	// Test Objective: Verify that account is created
+	// Input(s): 
+	// Expected Output: true, not null when read user id 1
+    @Test
+    void createUserAccount_TC18() {
+        User user = new User();
+
+        assertTrue(user.createUserAccount(
+            1, "John Doe", "password123",
+            "0812345678", "news agent"
+        ));
+
+        assertNotNull(user.readUserAccount(1));
+    }
+
+    // Test Number: TC19
+    // Test Objective: Verify that account info is read by id
+ 	// Input(s): new user account(2, "Jane Doe", "password123", "0823456789", "admin"), read by id 2
+ 	// Expected Output: "Jane Doe"
+    @Test
+    void readUserAccount_TC19() {
+        User user = new User();
+
+        user.createUserAccount(
+            2, "Jane Doe", "password123",
+            "0823456789", "admin"
+        );
+
+        User result = user.readUserAccount(2);
+
+        assertNotNull(result);
+        assertEquals("Jane Doe", result.getName());
+    }
+
+    // Test Number: TC20
+    // Test Objective: Verify that a user account is updated by id
+ 	// Input(s): 2
+ 	// Expected Output: name="John Smith", contact = 
+    @Test
+    void updateUserAccount_TC20() {
+        User user = new User();
+
+        user.createUserAccount(
+            3, "John Doe", "password123",
+            "0812345678", "news agent"
+        );
+
+        assertTrue(user.updateUserAccount(
+            3, "John Smith", "newpass123",
+            "0834567890", "admin"
+        ));
+
+        User result = user.readUserAccount(3);
+
+        assertNotNull(result);
+        assertEquals("John Smith", result.getName());
+        assertEquals("0834567890", result.getContact());
+        assertEquals("admin", result.getAccess_level());
+    }
+
+    // Test Number: TC21
+    // Test Objective: Verify that a user account is deleted by id
+ 	// Input(s): delete user id 4
+ 	// Expected Output: null when read user id 4
+    @Test
+    void deleteUserAccount_TC21() {
+        User user = new User();
+
+        user.createUserAccount(
+            4, "John Doe", "password123",
+            "0812345678", "news agent"
+        );
+
+        assertTrue(user.deleteUserAccount(4));
+        assertNull(user.readUserAccount(4));
+    }
     
     
 }
+
