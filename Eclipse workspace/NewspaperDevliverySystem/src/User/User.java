@@ -181,7 +181,7 @@ public class User {
         return true;
     }
 
-    // LIST: Display all user accounts
+    // Display all user accounts
     public void listUserAccounts() {
         if (users.isEmpty()) {
             System.out.println("No users found.");
