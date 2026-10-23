@@ -65,5 +65,66 @@ class TestDelArea {
 			DelArea user = new DelArea();
 		    assertFalse(user.verifyLocation(" "));
 		}
+		
+		// Test Number: TC07
+		// Test Objective: Verify that a delivery area is created
+		// Input(s): 1, "Athlone"
+		// Expected Output: true 
+	    @Test
+	    void createDelArea_TC07() {
+	        DelArea area = new DelArea();
 
+	        assertTrue(area.createDelArea(1, "Athlone"));
+
+	        assertNotNull(area.readDelArea(1));
+	        assertEquals("Athlone", area.readDelArea(1).getLocation());
+	    }
+
+	    // Test Number: TC08
+	    // Test Objective: Verify that a delivery area is read
+	 	// Input(s): 2
+	 	// Expected Output: "Dublin"
+	    @Test
+	    void readDelArea_TC08() {
+	        DelArea area = new DelArea();
+
+	        area.createDelArea(2, "Dublin");
+
+	        DelArea result = area.readDelArea(2);
+
+	        assertNotNull(result);
+	        assertEquals("Dublin", result.getLocation());
+	    }
+
+	    // Test Number: TC09
+	    // Test Objective: Verify that a delivery area is updated
+	 	// Input(s): (3, "Athlone"); update to (3,"Galway"), search by entering id 3
+	 	// Expected Output: "Galway"
+	    @Test
+	    void updateDelArea_TC09() {
+	        DelArea area = new DelArea();
+
+	        area.createDelArea(3, "Athlone");
+
+	        assertTrue(area.updateDelArea(3, "Galway"));
+
+	        DelArea result = area.readDelArea(3);
+
+	        assertNotNull(result);
+	        assertEquals("Galway", result.getLocation());
+	    }
+
+	    // Test Number: TC10
+	    // Test Objective: Verify that a delivery area is read
+	 	// Input(s): delete delivery id 4
+	 	// Expected Output: null when read id 4
+	    @Test
+	    void deleteDelArea_TC10() {
+	        DelArea area = new DelArea();
+
+	        area.createDelArea(4, "Athlone");
+
+	        assertTrue(area.deleteDelArea(4));
+	        assertNull(area.readDelArea(4));
+	    }
 }
