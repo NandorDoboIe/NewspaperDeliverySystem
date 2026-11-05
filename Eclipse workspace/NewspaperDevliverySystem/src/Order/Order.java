@@ -6,7 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Order {
+import Database.DataProvider;
+
+public class Order implements DataProvider {
 
     private final Map<Integer, Order> orders = new LinkedHashMap<>();
 
@@ -18,8 +20,12 @@ public class Order {
     public Order() {
     }
 
-    private Order(int orderID, int customerID,
-                  int publicationID, boolean[] deliveryPattern) {
+    public Order(int orderID, int customerID,
+                 int publicationID, boolean[] deliveryPattern) {
+        if (orderID <= 0 || customerID <= 0 || publicationID <= 0
+                || !verifyDeliveryPattern(deliveryPattern)) {
+            throw new IllegalArgumentException("Invalid order details");
+        }
         this.orderID = orderID;
         this.customerID = customerID;
         this.publicationID = publicationID;
@@ -33,6 +39,56 @@ public class Order {
         return deliveryPattern == null ? null : Arrays.copyOf(deliveryPattern, 7);
     }
 
+
+    /**
+     * Changes the publication without changing which customer owns the order.
+     */
+    public void setPublicationID(int publicationID) {
+        if (publicationID <= 0) {
+            throw new IllegalArgumentException("Invalid publication ID");
+        }
+        this.publicationID = publicationID;
+    }
+
+    /**
+     * Updates the delivery days (Monday to Sunday).
+     */
+    public void setDeliveryPattern(boolean[] deliveryPattern) {
+        if (!verifyDeliveryPattern(deliveryPattern)) {
+            throw new IllegalArgumentException("Invalid delivery pattern");
+        }
+        this.deliveryPattern = Arrays.copyOf(deliveryPattern, 7);
+    }
+
+    /**
+     * Provides the order's data in the same format as Customer.getData().
+     * The delivery pattern is seven digits (1 = deliver, 0 = no delivery).
+     * The column names must be checked against the team's actual SQL table.
+     */
+    @Override
+    public LinkedHashMap<String, Object> getData() {
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        if (orderID <= 0 || customerID <= 0 || publicationID <= 0
+                || !verifyDeliveryPattern(deliveryPattern)) {
+            return data;
+        }
+        data.put("orderId", orderID);
+        data.put("customerId", customerID);
+        data.put("publicationId", publicationID);
+        StringBuilder days = new StringBuilder();
+        for (boolean day : deliveryPattern) {
+            days.append(day ? '1' : '0');
+        }
+        data.put("deliveryPattern", days.toString());
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return "Order ID: " + orderID + "\nCustomer ID: " + customerID
+                + "\nPublication ID: " + publicationID
+                + "\nDelivery Pattern: " + getData().getOrDefault("deliveryPattern", "Not set");
+    }
 
     /**
      * Validates that the order ID is valid
@@ -155,8 +211,8 @@ public class Order {
                 || !updateSuccessful) {
             return false;
         }
-        order.publicationID = publicationID;
-        order.deliveryPattern = Arrays.copyOf(deliveryPattern, 7);
+        order.setPublicationID(publicationID);
+        order.setDeliveryPattern(deliveryPattern);
         return true;
     }
 

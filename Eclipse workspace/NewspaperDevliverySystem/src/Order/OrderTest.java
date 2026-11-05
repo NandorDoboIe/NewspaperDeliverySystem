@@ -621,4 +621,76 @@ public class OrderTest {
         assertFalse(order.deleteOrder(1001, 101, true, false));
         assertNotNull(order.readOrder(1001, 101, true));
     }
+
+    // TC53
+    // Test Objective: Verify Order implements the same DataProvider interface as Customer
+    // Input(s): An order with ID 1001, customer 101 and publication 201
+    // Expected Output(s): getData provides matching database field values
+    @Test
+    void dataProviderValues_TC53() {
+        boolean[] pattern = {true, false, true, false, false, false, false};
+        Order order = new Order(1001, 101, 201, pattern);
+        Database.DataProvider provider = order;
+        assertEquals(1001, provider.getData().get("orderId"));
+        assertEquals(101, provider.getData().get("customerId"));
+        assertEquals(201, provider.getData().get("publicationId"));
+        assertEquals("1010000", provider.getData().get("deliveryPattern"));
+    }
+
+    // TC54
+    // Test Objective: Verify Order can be constructed as an entity with getters
+    // Input(s): Order ID 1001, customer 101, publication 201, two delivery days
+    // Expected Output(s): Correct details returned and delivery days copied safely
+    @Test
+    void orderEntityAndDefensiveCopy_TC54() {
+        boolean[] pattern = {true, false, true, false, false, false, false};
+        Order order = new Order(1001, 101, 201, pattern);
+        pattern[0] = false;
+        assertEquals(1001, order.getOrderID());
+        assertEquals(101, order.getCustomerID());
+        assertEquals(201, order.getPublicationID());
+        assertTrue(order.getDeliveryPattern()[0]);
+        boolean[] returned = order.getDeliveryPattern();
+        returned[2] = false;
+        assertTrue(order.getDeliveryPattern()[2]);
+    }
+
+    // TC55
+    // Test Objective: Verify the Order uses the same numeric customer ID as Customer
+    // Input(s): Customer ID 101 and an Order belonging to customer 101
+    // Expected Output(s): Customer and Order IDs correspond
+    @Test
+    void orderCustomerIdMatchesCustomer_TC55() {
+        Customer.Customer customer = new Customer.Customer(
+                "John", "Smith", "Main Street", "0871234567");
+        customer.setCustomerId(101);
+        boolean[] pattern = {true, false, true, false, false, false, false};
+        Order order = new Order(1001, 101, 201, pattern);
+        assertEquals(customer.getCustomerId(), order.getCustomerID());
+    }
+
+    // TC56
+    // Test Objective: Verify invalid blank Order entity cannot supply data for insertion
+    // Input(s): Order with default constructor and no fields set
+    // Expected Output(s): Empty data map
+    @Test
+    void emptyOrderData_TC56() {
+        Order order = new Order();
+        assertTrue(order.getData().isEmpty());
+    }
+
+    // TC57
+    // Test Objective: Verify changing a publication updates the values for the DAO
+    // Input(s): Publication ID 202 replaces 201 on an existing Order
+    // Expected Output(s): Updated publication in getData, same customer ID
+    @Test
+    void updatedOrderData_TC57() {
+        Order orders = new Order();
+        boolean[] pattern = {true, false, true, false, false, false, false};
+        assertTrue(orders.createOrder(1001, 101, 201, pattern, true, true, true, true));
+        assertTrue(orders.updateOrder(1001, 101, 202, pattern, true, true, true));
+        Order updated = orders.readOrder(1001, 101, true);
+        assertEquals(202, updated.getData().get("publicationId"));
+        assertEquals(101, updated.getData().get("customerId"));
+    }
 }
