@@ -6,4 +6,5 @@ Junit Tests:
 __Order 57/57 Passed__
 __Publication Tests ready__
 __User 21/21 Passsed__
+__Del.Area 
 
