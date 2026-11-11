@@ -1,4 +1,4 @@
-package Customer_TDD;
+package Customer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
