@@ -11,16 +11,16 @@ public class Customer implements DataProvider{
 	private String firstName;
 	private String surname;
 	private String address;
-	private String phoneNumber;
+	private String contact;
 
 	public Customer() {
 	}
 
-	public Customer(String firstName, String surname, String address, String phoneNumber) {
+	public Customer(String firstName, String surname, String address, String contact) {
 		this.firstName = firstName;
 		this.surname = surname;
 		this.address = address;
-		this.phoneNumber = phoneNumber;
+		this.contact = contact;
 	}
 
 	public int getCustomerId() {
@@ -55,18 +55,18 @@ public class Customer implements DataProvider{
 		this.address = address;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getcontact() {
+		return contact;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setcontact(String contact) {
+		this.contact = contact;
 	}
 
 	@Override
 	public String toString() {
 		return "Customer ID: " + customerId + "\nFirst Name: " + firstName + "\nSurname: " + surname + "\nAddress: "
-				+ address + "\nPhone Number: " + phoneNumber;
+				+ address + "\nPhone Number: " + contact;
 	}
 	
 	public LinkedHashMap<String,Object> getData(){
@@ -74,7 +74,7 @@ public class Customer implements DataProvider{
 		data.put("firstName",this.getFirstName());
 		data.put("surName",this.getSurname());
 		data.put("address",this.getAddress());
-		data.put("phoneNumber",this.getPhoneNumber());
+		data.put("contact",this.getcontact());
 		return data;
 	}
 }
