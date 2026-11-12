@@ -7,8 +7,8 @@ import Database.DAO;
 public class testConnection {
     public static void main(String[] args) {
 
-        Customer customer = new Customer("Jane Doe", "12 High Street", "0871234567");
-        Customer updateCustomer = new Customer("wfawv", "asdwad", "0871234567");
+        Customer customer = new Customer(1, "Jane Doe", "12 High Street", "0871234567");
+        Customer updateCustomer = new Customer(2, "wfawv", "asdwad", "0871234567");
 
         DAO dao = new DAO();
         boolean success = dao.addData("customer", customer);

@@ -125,7 +125,6 @@ public class Customer implements DataProvider{
 			return true;
 		}
 		return false;
-
 }
 	
 	public LinkedHashMap<String,Object> getData(){
