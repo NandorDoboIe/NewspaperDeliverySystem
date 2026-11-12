@@ -2,7 +2,8 @@ CREATE DATABASE newsPaperSystemDatabase;
 
 CREATE TABLE newsPaperSystemDatabase.customer (
     customerId INT AUTO_INCREMENT PRIMARY KEY,
-    name       VARCHAR(150) NOT NULL,
+    firstname       VARCHAR(150) NOT NULL,
+    surname       VARCHAR(150) NOT NULL,
     address    VARCHAR(150) NOT NULL,
     contact    VARCHAR(150) NOT NULL
 );
