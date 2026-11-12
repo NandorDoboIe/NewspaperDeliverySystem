@@ -132,7 +132,7 @@ public class Customer implements DataProvider{
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
 		data.put("name",this.getName());
 		data.put("address",this.getAddress());
-		data.put("phoneNumber",this.getContact());
+		data.put("contact",this.getContact());
 		return data;
 	}
 }
