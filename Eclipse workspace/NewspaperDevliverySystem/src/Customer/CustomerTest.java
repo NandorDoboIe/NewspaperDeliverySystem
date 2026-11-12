@@ -143,5 +143,43 @@ public class CustomerTest {
         Customer customer = new Customer(); 
         assertFalse(customer.createCustomer("Arnold","Athlone",""));
     }
-
+    
+    // TC19
+    // Test Objective: Verify an existing customer is updated when all details are valid
+    // Input(s): ID = 2, Name = "Arnold", Address = "Dublin", Contact = "0871234567"
+    // Expected Output(s): Customer details updated
+    @Test
+    void validCustomer_TC19() {
+    	Customer customer = new Customer();
+    	assertTrue(customer.updateCustomer(2, "Arnold", "Dublin", "0871234567"));
+    }
+    
+    // TC20
+    // Test Objective: Verify update is rejected when the customer does not exist
+    // Input(s): ID = 99 CustomerIDs=[1,2]
+    // Expected Output(s): Error message: Customer does not exist
+    @Test
+    void invalidID_TC20() {
+    	Customer customer = new Customer();
+    	assertFalse(customer.updateCustomer(99, "Arnold", "Dublin", "0871234567"));
+    }
+    
+    // TC21
+    // Test Objective: Verify update is rejected when the name is empty
+    // Input(s): ID = 2, Name = ""
+    // Expected Output(s): Error message: Invalid Customer Name
+    void invalidName_TC21() {
+    	Customer customer = new Customer();
+    	assertFalse(customer.updateCustomer(2, "", "Dublin", "0871234567"));
+    }
+    
+    // TC22
+    // Test Objective: Verify update is rejected when the address is empty
+    // Input(s): ID = 2, Address = ""
+    // Expected Output(s): Error message: Invalid Customer Address
+    @Test
+    void invalidAddress_TC22() {
+    	Customer customer = new Customer();
+    	assetFalse(customer.updateCustomer(2, "Arnold", "", "0871234567"));
+    }
 }
