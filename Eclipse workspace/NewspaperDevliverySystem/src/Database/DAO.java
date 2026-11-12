@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class DAO {
 	
-	private static final Set<String> ALLOWED_TABLES = Set.of("customer");
+	private static final Set<String> ALLOWED_TABLES = Set.of("customer","publications","orders","deliveryDocket","deliveryArea","user","bill");
 	
 	public boolean addData(String tableName,DataProvider entity) {
 		checkForAllowedTables(tableName);

@@ -1,6 +1,11 @@
 package CLI;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
+
+import Database.DAO;
+import Publication.Publication;
 
 public class PublicationCLI {
 
@@ -10,7 +15,7 @@ public class PublicationCLI {
         this.scanner = scanner;
     }
 
-    public void showMenu() {
+    public void showMenu(ArrayList<LinkedHashMap<String, Object>> publicationData) {
         while (true) {
             System.out.println("\n## PUBLICATIONS ##");
             System.out.println("1. Create Publication");
@@ -46,25 +51,52 @@ public class PublicationCLI {
 
     private void createPublication() {
         System.out.println("Create Publication: not connected yet.");
+        DAO dao = new DAO();
+        Publication newPublication = new Publication();
+        boolean success = dao.addData("publications", newPublication);
+        
+        if(success) {
+        	System.out.println("Publication uploaded to the database sucessfully");
+        } else {
+        	System.out.println("Insert failed");
+        }
     }
 
     private void viewPublications() {
         System.out.println("View Publications: not connected yet.");
+        DAO dao = new DAO();
+        ArrayList<LinkedHashMap<String,Object>> publicationsData = dao.readTable("publications");
+        for(LinkedHashMap<String,Object> row: publicationsData) {
+        	System.out.println(row.get("name")+"-"+row.get("type")+"-"+row.get("cost")+"-"+row.get("stock"));
+        }
     }
 
     private void updatePublication() {
         System.out.println("Update Publication: not connected yet.");
+        DAO dao = new DAO();
+        Publication updatedPublication = new Publication();
+        
+        boolean success = dao.editRow("publications", updatedPublication ,updatedPublication.getPublicationID());
+        if(success) {
+        	System.out.println("Publication updated to the database sucessfully");
+        } else {
+        	System.out.println("Update failed");
+        }
     }
 
     private void deletePublication() {
         System.out.println("Delete Publication: not connected yet.");
+        
+        DAO dao = new DAO();
+        Publication toBeDeletedPublication = new Publication();
+        boolean success = dao.deleteRow("publications", toBeDeletedPublication.getPublicationID());
     }
 
     private void restockPublication() {
         System.out.println("Restock Publication: not connected yet.");
     }
 
-    public void showLowStockAlerts() {
+    public void showLowStockAlerts(ArrayList<LinkedHashMap<String, Object>> publicationData) {
         System.out.println("Low Stock Alerts: not connected yet.");
     }
 

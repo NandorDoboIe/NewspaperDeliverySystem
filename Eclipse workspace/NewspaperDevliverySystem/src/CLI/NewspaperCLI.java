@@ -1,17 +1,45 @@
 package CLI;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
+
+import Database.DAO;
 
 public class NewspaperCLI {
 
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        mainMenu();
+    	startUp();
         scanner.close();
     }
 
-    private static void mainMenu() {
+    private static void startUp() {
+    	DAO dao = new DAO();
+    	
+    	ArrayList<LinkedHashMap<String,Object>> customerData = dao.readTable("customer");
+    	ArrayList<LinkedHashMap<String,Object>> publicationData = dao.readTable("publications");
+    	ArrayList<LinkedHashMap<String,Object>> orderData = dao.readTable("orders");
+    	ArrayList<LinkedHashMap<String,Object>> deliveryDocketData = dao.readTable("deliveryDocket");
+    	ArrayList<LinkedHashMap<String,Object>> BillData = dao.readTable("bill");
+    	ArrayList<LinkedHashMap<String,Object>> DeliveryAreaData = dao.readTable("deliveryArea");
+    	ArrayList<LinkedHashMap<String,Object>> UserData = dao.readTable("user");
+    	
+    	
+    	
+    	mainMenu(customerData,publicationData,orderData,deliveryDocketData,BillData,DeliveryAreaData,UserData);
+    }
+    
+    private static void mainMenu(
+    		ArrayList<LinkedHashMap<String, Object>> customerData,
+            ArrayList<LinkedHashMap<String, Object>> publicationData,
+            ArrayList<LinkedHashMap<String, Object>> orderData,
+            ArrayList<LinkedHashMap<String, Object>> deliveryDocketData,
+            ArrayList<LinkedHashMap<String, Object>> billData,
+            ArrayList<LinkedHashMap<String, Object>> deliveryAreaData,
+            ArrayList<LinkedHashMap<String, Object>> userData) {
+    	
         //CustomerCLI customerCLI = new CustomerCLI(scanner);
         PublicationCLI publicationCLI = new PublicationCLI(scanner);
         OrderCLI orderCLI = new OrderCLI(scanner);
@@ -34,28 +62,28 @@ public class NewspaperCLI {
 
             switch (readChoice()) {
                 case 1:
-                    customerCLI.showMenu();
+                    //customerCLI.showMenu(customerData);
                     break;
                 case 2:
-                    publicationCLI.showMenu();
+                    publicationCLI.showMenu(publicationData);
                     break;
                 case 3:
-                    orderCLI.showMenu();
+                    orderCLI.showMenu(orderData);
                     break;
                 case 4:
-                    deliveryDocketCLI.showMenu();
+                    //deliveryDocketCLI.showMenu(deliveryDocketData);
                     break;
                 case 5:
-                    billCLI.showMenu();
+                    //billCLI.showMenu(BillData);
                     break;
                 case 6:
-                    deliveryAreaCLI.showMenu();
+                    //deliveryAreaCLI.showMenu(DeliveryAreaData);
                     break;
                 case 7:
-                    userCLI.showMenu();
+                    //userCLI.showMenu(UserData);
                     break;
                 case 8:
-                    publicationCLI.showLowStockAlerts();
+                    publicationCLI.showLowStockAlerts(publicationData);
                     break;
                 case 0:
                     System.out.println("Where do you think your going? There's work to do!!!");

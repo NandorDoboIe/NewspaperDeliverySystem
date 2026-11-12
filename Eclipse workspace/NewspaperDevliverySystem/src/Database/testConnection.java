@@ -3,19 +3,21 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import Customer.Customer;
+import Publication.Publication;
 
 public class testConnection {
     public static void main(String[] args) {
 
         Customer customer = new Customer("Jane", "Doe", "12 High Street", "0871234567");
         Customer updateCustomer = new Customer("wfawv","adwad","asdwad","0871234567");
+        Publication publication = new Publication(1,"asd","asd",10,10);
 
         DAO dao = new DAO();
         boolean success = dao.addData("customer", customer);
         ArrayList<LinkedHashMap<String,Object>> table = dao.readTable("customer");
         //boolean deleteSuccess = dao.deleteRow("customer", 1);
         boolean updateSuccess = dao.editRow("customer",updateCustomer,3);
-        
+        dao.addData("publications", publication);
 
         if (success) {
             System.out.println("Customer inserted successfully.");
