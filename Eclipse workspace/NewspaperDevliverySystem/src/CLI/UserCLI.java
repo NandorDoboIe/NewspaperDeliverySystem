@@ -49,7 +49,7 @@ public class UserCLI {
 	    }
 
 	    private void createUser() {
-	        System.out.println("Create Order: not connected yet.");
+	        System.out.println("Create User: not connected yet.");
 	    }
 
 	    private void viewAllUsers() {
