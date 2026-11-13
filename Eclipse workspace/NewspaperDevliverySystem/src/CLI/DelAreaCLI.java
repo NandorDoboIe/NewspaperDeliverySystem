@@ -49,23 +49,23 @@ public class DelAreaCLI {
 	    }
 
 	    private void createDelArea() {
-	        System.out.println("Create Order: not connected yet.");
+	        System.out.println("Create Delivery Area: not connected yet.");
 	    }
 
 	    private void viewAllDelArea() {
-	        System.out.println("View All Users: not connected yet.");
+	        System.out.println("View All Delivery Areas: not connected yet.");
 	    }
 	    
 	    private void viewDelAreaById() {
-	        System.out.println("View Users by ID: not connected yet.");
+	        System.out.println("View Delivery Area by ID: not connected yet.");
 	    }
 
 	    private void updateDelArea() {
-	        System.out.println("Update User: not connected yet.");
+	        System.out.println("Update Delivery Area: not connected yet.");
 	    }
 
 	    private void deleteDelArea() {
-	        System.out.println("Delete User: not connected yet.");
+	        System.out.println("Delete Delivery Area: not connected yet.");
 	    }
 
 	    private int readChoice() {
