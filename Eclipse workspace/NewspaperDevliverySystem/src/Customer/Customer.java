@@ -64,14 +64,23 @@ public class Customer implements DataProvider{
 	}
 
 	public boolean verifyName(String name){
+		if(name == null) {
+			return false;
+		}
         return !name.equals("");
     }
 
 	public boolean verifyAddress(String address){
+		if(address == null) {
+			return false;
+		}
         return !address.equals("");
     }
 
 	public boolean verifyContact(String contact){
+		if(contact == null) {
+			return false;
+		}
         if(contact.length() == 10){
             return StringUtils.isNumeric(contact);
         }
@@ -82,8 +91,9 @@ public class Customer implements DataProvider{
         return saveSuccessful;
     }
 
-	public boolean createCustomer(String name, String address, String contact) {
-        if(this.verifyName(name)
+	public boolean createCustomer(int customerId, String name, String address, String contact) {
+        if(customerId > 0 
+        && this.verifyName(name)
         && this.verifyAddress(address)
         && this.verifyContact(contact)){
             customers.put(customerId, new Customer(customerId, name, address, contact));
@@ -107,6 +117,9 @@ public class Customer implements DataProvider{
 	}
 
 	public boolean updateCustomer(int customerId, String name, String address, String contact){
+		if(readCustomer(customerId) == null) {
+			return false;
+		}
 		Customer customer = readCustomer(customerId);
 		if(this.verifyName(name)
         && this.verifyAddress(address)
