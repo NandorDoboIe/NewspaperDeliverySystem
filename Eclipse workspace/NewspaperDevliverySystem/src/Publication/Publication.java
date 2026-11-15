@@ -2,9 +2,11 @@ package Publication;
 
 import java.util.LinkedHashMap;
 
+import Database.DataProvider;
 
 
-public class Publication {
+
+public class Publication implements DataProvider {
 	private final int publicationsId; // 0 means this record has not been inserted yet
 	private String name;
 	private String type;
@@ -31,7 +33,10 @@ public class Publication {
 	        ((Number) row.get("stock")).intValue()
 	    );
 	}
-
+	public Publication() {
+	    this.publicationsId = 0;
+	}
+	
 	public int getPublicationID() {
 		return publicationsId;
 	}
