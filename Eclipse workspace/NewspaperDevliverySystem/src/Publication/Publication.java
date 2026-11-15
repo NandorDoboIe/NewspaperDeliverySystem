@@ -1,10 +1,9 @@
 package Publication;
 
 import java.util.LinkedHashMap;
+import Database.DataProvider;
 
-
-
-public class Publication {
+public class Publication implements DataProvider {
 	private final int publicationsId; // 0 means this record has not been inserted yet
 	private String name;
 	private String type;
@@ -23,13 +22,12 @@ public class Publication {
 	}
 
 	public Publication(LinkedHashMap<String, Object> row) {
-	    this(
-	        ((Number) row.get("publicationsId")).intValue(),
-	        (String) row.get("name"),
-	        (String) row.get("type"),
-	        ((Number) row.get("cost")).intValue(),
-	        ((Number) row.get("stock")).intValue()
-	    );
+		this(((Number) row.get("publicationsId")).intValue(), (String) row.get("name"), (String) row.get("type"),
+				((Number) row.get("cost")).intValue(), ((Number) row.get("stock")).intValue());
+	}
+
+	public Publication() {
+		this.publicationsId = 0;
 	}
 
 	public int getPublicationID() {
@@ -102,4 +100,15 @@ public class Publication {
 		return "Publication " + publicationsId + ": " + name + " (" + type + ")" + " | Cost: " + cost + " | Stock: "
 				+ stock;
 	}
+
+	@Override
+	public LinkedHashMap<String, Object> getData() {
+		LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+		data.put("name", name);
+		data.put("type", type);
+		data.put("cost", cost);
+		data.put("stock", stock);
+		return data;
+	}
+
 }
