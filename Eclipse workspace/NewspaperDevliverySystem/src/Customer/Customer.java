@@ -8,76 +8,69 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Customer implements DataProvider{
 
-	private final Map<Integer, Customer> customers = new LinkedHashMap<>();
-
 	private int customerId;
 	private String name;
 	private String address;
 	private String contact;
 
-	public Customer() {
-	}
-
 	public Customer(int customerId, String name, String address, String contact) {
-		this.customerId = customerId;
-		this.name = name;
-		this.address = address;
-		this.contact = contact;
+		if(verifyId(customerId)
+		        && verifyName(name)
+		        && verifyAddress(address)
+		        && verifyContact(contact)){
+			this.customerId = customerId;
+			this.name = name;
+			this.address = address;
+			this.contact = contact;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid customer details");
+		}
 	}
 
-	public int getCustomerId() {
-		return customerId;
-	}
+	public int getCustomerId() {return customerId;}
+	
+	public String getName() {return name;}
+	
+	public String getAddress() {return address;}
+	
+	public String getContact() {return contact;}
 
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
 
-	public String getName() {
-		return name;
-	}
+	public void setCustomerId(int customerId) {this.customerId = customerId;}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public void setName(String name) {this.name = name;}
 
-	public String getAddress() {
-		return address;
-	}
+	public void setAddress(String address) {this.address = address;}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
 
-	public String getContact() {
-		return contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
+	public void setContact(String contact) {this.contact = contact;}
 
 	@Override
 	public String toString() {
 		return "Customer ID: " + customerId + "\nName: " + name + "\nAddress: "
-				+ address + "\nPhone Number: " + contact;
+				+ address + "\nContact: " + contact;
 	}
-
-	public boolean verifyName(String name){
+	
+	private boolean verifyId(int id) {
+		return id > 0;
+	}
+	
+	private boolean verifyName(String name){
 		if(name == null) {
 			return false;
 		}
         return !name.equals("");
     }
 
-	public boolean verifyAddress(String address){
+	private boolean verifyAddress(String address){
 		if(address == null) {
 			return false;
 		}
         return !address.equals("");
     }
 
-	public boolean verifyContact(String contact){
+	private boolean verifyContact(String contact){
 		if(contact == null) {
 			return false;
 		}
@@ -87,58 +80,29 @@ public class Customer implements DataProvider{
         return false;
     }
 
-	public boolean verifySave(boolean saveSuccessful) {
-        return saveSuccessful;
-    }
+	//public Customer readCustomer(){
+	//	return this;
+	//}
 
-	public boolean createCustomer(int customerId, String name, String address, String contact) {
-        if(customerId > 0 
-        && this.verifyName(name)
-        && this.verifyAddress(address)
-        && this.verifyContact(contact)){
-            customers.put(customerId, new Customer(customerId, name, address, contact));
-            return true;
-        }
-        return false;
-    }
-
-	public List<Customer> readCustomers(){
-		List<Customer> results = new ArrayList<>();
-        for (Customer customer : customers.values()) {
-            results.add(customer);
-        }
-        return results;
-	}
-
-	public Customer readCustomer(int customerId){
-		Customer customer = customers.get(customerId);
-
-		return customer;
-	}
-
-	public boolean updateCustomer(int customerId, String name, String address, String contact){
-		if(readCustomer(customerId) == null) {
-			return false;
-		}
-		Customer customer = readCustomer(customerId);
+	public boolean updateCustomer(String name, String address, String contact){
 		if(this.verifyName(name)
         && this.verifyAddress(address)
         && this.verifyContact(contact)){
-            customer.setName(name);
-			customer.setAddress(address);
-			customer.setContact(contact);
+            setName(name);
+			setAddress(address);
+			setContact(contact);
             return true;
         }
         return false;
     }
 
-	public boolean deleteCustomer(int customerId){
-		if(readCustomer(customerId) != null){
-			customers.remove(customerId);
-			return true;
-		}
-		return false;
-}
+	//public boolean deleteCustomer(int customerId){
+	//	if(readCustomer(customerId) != null){
+	//		customers.remove(customerId);
+	//		return true;
+	//	}
+	//		return false;
+	//}
 	
 	public LinkedHashMap<String,Object> getData(){
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
