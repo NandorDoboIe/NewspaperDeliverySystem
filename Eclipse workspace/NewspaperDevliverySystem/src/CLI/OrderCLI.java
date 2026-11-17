@@ -48,11 +48,14 @@ public class OrderCLI {
     private void createOrder() {
         System.out.println("Create Order: not connected yet.");
         
+        
+        
+        
         DAO dao = new DAO();
         Publication newOrder = new Publication();
-        boolean success = dao.addData("order", newOrder);
+        int id = dao.addData("order", newOrder);
         
-        if(success) {
+        if(id!= -1) {
         	System.out.println("Order uploaded to the database sucessfully");
         } else {
         	System.out.println("Insert failed");
@@ -102,4 +105,16 @@ public class OrderCLI {
             return -1;
         }
     }
+    
+	private LinkedHashMap<String, Object> takeUserInput(ArrayList<String> variables) {
+		LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
+		
+		variables.forEach(variable -> {
+			System.out.print("Please enter"+variable+": ");
+			String input = scanner.nextLine().trim();
+			userInput.put(variable, input);
+		});
+		
+		return userInput;
+	}
 }

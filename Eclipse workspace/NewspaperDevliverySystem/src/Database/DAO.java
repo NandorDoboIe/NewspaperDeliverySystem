@@ -11,45 +11,54 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.sql.Statement;
 
 public class DAO {
 	
 	private static final Set<String> ALLOWED_TABLES = Set.of("customer","publications","orders","deliveryDocket","deliveryArea","user","bill");
 	
-	public boolean addData(String tableName,DataProvider entity) {
-		checkForAllowedTables(tableName);
-		
-		LinkedHashMap<String,Object> data = entity.getData();
-		
-		if(data == null || data.isEmpty()) {
-			System.out.println("No data to insert");
-			return false;
-		}
-		
-		String columns = String.join(", ", data.keySet());
-		String placeholders = String.join(", ", Collections.nCopies(data.size(),"?"));
-		
-		String sql = "INSERT INTO newspapersystemdatabase." +tableName+ " (" +columns +") Values ("+placeholders+")";
-		
-		try (Connection conn = DatabaseConnection.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(sql)) {
-			
-			int index = 1;
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                stmt.setObject(index, entry.getValue()); 
-                index++;
-            }
-			
-			
-			int rowsInserted = stmt.executeUpdate();
 
-			return rowsInserted > 0;
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+	  public int addData(String tableName, DataProvider entity) {
+	      checkForAllowedTables(tableName);
+
+	      LinkedHashMap<String, Object> data = entity.getData();
+
+	      if (data == null || data.isEmpty()) {
+	          System.out.println("No data to insert");
+	          return -1;
+	      }
+
+	      String columns = String.join(", ", data.keySet());
+	      String placeholders = String.join(", ", Collections.nCopies(data.size(), "?"));
+
+	      String sql = "INSERT INTO newspapersystemdatabase." + tableName
+	              + " (" + columns + ") VALUES (" + placeholders + ")";
+
+	      try (Connection conn = DatabaseConnection.getConnection();
+	           PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	          int index = 1;
+	          for (Map.Entry<String, Object> entry : data.entrySet()) {
+	              stmt.setObject(index, entry.getValue());
+	              index++;
+	          }
+
+	          if (stmt.executeUpdate() == 0) {
+	              return -1;
+	          }
+
+	          try (ResultSet keys = stmt.getGeneratedKeys()) {
+	              if (keys.next()) {
+	                  return keys.getInt(1);
+	              }
+	          }
+	          return -1;
+
+	      } catch (SQLException e) {
+	          e.printStackTrace();
+	          return -1;
+	      }
+	  }
 	
 	public ArrayList<LinkedHashMap<String, Object>> readTable(String tableName) {
 		checkForAllowedTables(tableName);

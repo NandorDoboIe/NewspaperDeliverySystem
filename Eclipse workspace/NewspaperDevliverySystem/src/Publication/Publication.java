@@ -22,8 +22,11 @@ public class Publication implements DataProvider {
 	}
 
 	public Publication(LinkedHashMap<String, Object> row) {
-		this(((Number) row.get("publicationsId")).intValue(), (String) row.get("name"), (String) row.get("type"),
-				((Number) row.get("cost")).intValue(), ((Number) row.get("stock")).intValue());
+	    this(toInt(row.get("publicationsId")),
+	         (String) row.get("name"),
+	         (String) row.get("type"),
+	         toInt(row.get("cost")),
+	         toInt(row.get("stock")));
 	}
 
 	public Publication() {
@@ -110,5 +113,15 @@ public class Publication implements DataProvider {
 		data.put("stock", stock);
 		return data;
 	}
+	private static int toInt(Object value) {
+	    if (value instanceof Number) {
+	      return ((Number) value).intValue();
+	    }
+	    try {
+	      return Integer.parseInt(String.valueOf(value).trim());
+	    } catch (NumberFormatException ex) {
+	      throw new IllegalArgumentException("Invalid number: " + value);
+	    }
+	  }
 
 }

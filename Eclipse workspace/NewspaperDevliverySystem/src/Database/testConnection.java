@@ -13,20 +13,20 @@ public class testConnection {
         Publication publication = new Publication(1,"asd","asd",10,10);
 
         DAO dao = new DAO();
-        boolean success = dao.addData("customer", customer);
+        //boolean success = dao.addData("customer", customer);
         ArrayList<LinkedHashMap<String,Object>> table = dao.readTable("customer");
         //boolean deleteSuccess = dao.deleteRow("customer", 1);
         boolean updateSuccess = dao.editRow("customer",updateCustomer,3);
         dao.addData("publications", publication);
 
-        if (success) {
+        /**if (success) {
             System.out.println("Customer inserted successfully.");
             for(LinkedHashMap<String,Object> row: table) {
             	System.out.println(row.get("customerId")+"-"+row.get("firstname")+"....");
             }
         } else {
             System.out.println("Insert failed.");
-        }
+        }*/
         
         //if (deleteSuccess) {
         //    System.out.println("Customer deleted successfully.");

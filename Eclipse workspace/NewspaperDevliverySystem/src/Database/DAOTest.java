@@ -67,12 +67,8 @@ class DAOTest {
 
 	/** Inserts a customer and returns its generated id (tracked for clean-up). */
 	private int addCustomer(Customer c) {
-		Set<Integer> before = currentIds();
-		assertTrue(dao.addData("customer", c), "setup insert should succeed");
-		Set<Integer> after = currentIds();
-		after.removeAll(before);
-		assertEquals(1, after.size(), "exactly one new row expected");
-		int id = after.iterator().next();
+		int id = dao.addData("customer", c);
+		assertTrue(id > 0, "setup insert should succeed");
 		createdIds.add(id);
 		return id;
 	}
@@ -135,24 +131,22 @@ class DAOTest {
 	@Test // TC05
 	void tc05_emptyDataNotInserted() {
 		int before = dao.readTable("customer").size();
-		assertFalse(dao.addData("customer", providerOf(new LinkedHashMap<>())));
+		assertEquals(-1, dao.addData("customer", providerOf(new LinkedHashMap<>())));
 		assertTrue(output().contains("No data to insert"));
 		assertEquals(before, dao.readTable("customer").size());
 	}
 
 	@Test // TC06
 	void tc06_nullDataNotInserted() {
-		assertFalse(dao.addData("customer", providerOf(null)));
+		assertEquals(-1, dao.addData("customer", providerOf(null)));
 		assertTrue(output().contains("No data to insert"));
 	}
 
 	@Test // TC07
 	void tc07_validCustomerInserted() {
-		Set<Integer> before = currentIds();
-		assertTrue(dao.addData("customer", jane()));
-		Set<Integer> after = currentIds();
-		after.removeAll(before);
-		createdIds.addAll(after);
+		int id = dao.addData("customer", jane());
+		assertTrue(id > 0);
+		createdIds.add(id);
 	}
 
 	@Test // TC08
@@ -183,7 +177,7 @@ class DAOTest {
 	@Test
 	@Disabled("TC11 - manual: stop the MySQL server, then run. Expect false and a stack trace.")
 	void tc11_insertFailsWhenDatabaseUnreachable() {
-		assertFalse(dao.addData("customer", jane()));
+		assertEquals(-1, dao.addData("customer", jane()));
 	}
 
 	@Test // TC12
@@ -191,7 +185,7 @@ class DAOTest {
 		String tooLong = "x".repeat(300); // columns are VARCHAR(150)
 		Customer bad = new Customer(tooLong, "Doe", "12 High Street", "0871234567");
 		int before = dao.readTable("customer").size();
-		assertFalse(dao.addData("customer", bad));
+		assertEquals(-1, dao.addData("customer", bad));
 		assertEquals(before, dao.readTable("customer").size());
 	}
 
@@ -419,13 +413,8 @@ class DAOTest {
 
 	@Test // TC45
 	void tc45_createReadEditDeleteInOrder() {
-		Set<Integer> before = currentIds();
-
-		assertTrue(dao.addData("customer", jane()));
-		Set<Integer> afterAdd = currentIds();
-		afterAdd.removeAll(before);
-		assertEquals(1, afterAdd.size());
-		int id = afterAdd.iterator().next();
+		int id = dao.addData("customer", jane());
+		assertTrue(id > 0);
 		createdIds.add(id);
 		assertNotNull(findRow(id));
 

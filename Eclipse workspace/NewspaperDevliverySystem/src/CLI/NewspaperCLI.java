@@ -3,7 +3,8 @@ package CLI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
-
+import java.util.function.Function;
+import Publication.Publication;
 import Database.DAO;
 
 public class NewspaperCLI {
@@ -18,27 +19,28 @@ public class NewspaperCLI {
     private static void startUp() {
     	DAO dao = new DAO();
     	
-    	ArrayList<LinkedHashMap<String,Object>> customerData = dao.readTable("customer");
-    	ArrayList<LinkedHashMap<String,Object>> publicationData = dao.readTable("publications");
-    	ArrayList<LinkedHashMap<String,Object>> orderData = dao.readTable("orders");
-    	ArrayList<LinkedHashMap<String,Object>> deliveryDocketData = dao.readTable("deliveryDocket");
-    	ArrayList<LinkedHashMap<String,Object>> BillData = dao.readTable("bill");
-    	ArrayList<LinkedHashMap<String,Object>> DeliveryAreaData = dao.readTable("deliveryArea");
-    	ArrayList<LinkedHashMap<String,Object>> UserData = dao.readTable("user");
+    	
+    	//ArrayList<Publication> customers = createObjects(dao.readTable("customer"),Publication::new);
+    	ArrayList<Publication> publications = createObjects(dao.readTable("publications"),Publication::new);
+    	/**ArrayList<Publication> orders = createObjects(dao.readTable("orders"),Publication::new);
+    	ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDocket"),Publication::new);
+    	ArrayList<Publication> bills = createObjects(dao.readTable("bill"),Publication::new);
+    	ArrayList<Publication> deliveryAreas = createObjects(dao.readTable("deliveryArea"),Publication::new);
+    	ArrayList<Publication> users = createObjects(dao.readTable("user"),Publication::new);*/
     	
     	
-    	
-    	mainMenu(customerData,publicationData,orderData,deliveryDocketData,BillData,DeliveryAreaData,UserData);
+    	//mainMenu(customers,publications,orders,deliveryDockets,bills,deliveryAreas,users);
+    	mainMenu(publications);
     }
     
     private static void mainMenu(
-    		ArrayList<LinkedHashMap<String, Object>> customerData,
-            ArrayList<LinkedHashMap<String, Object>> publicationData,
-            ArrayList<LinkedHashMap<String, Object>> orderData,
-            ArrayList<LinkedHashMap<String, Object>> deliveryDocketData,
-            ArrayList<LinkedHashMap<String, Object>> billData,
-            ArrayList<LinkedHashMap<String, Object>> deliveryAreaData,
-            ArrayList<LinkedHashMap<String, Object>> userData) {
+    		//ArrayList<> customers,
+            ArrayList<Publication> publications
+            /**ArrayList<LinkedHashMap<String, Object>> orders,
+            ArrayList<LinkedHashMap<String, Object>> deliveryDockets,
+            ArrayList<LinkedHashMap<String, Object>> bills,
+            ArrayList<LinkedHashMap<String, Object>> deliveryAreas,
+            ArrayList<LinkedHashMap<String, Object>> users*/) {
     	
         //CustomerCLI customerCLI = new CustomerCLI(scanner);
         PublicationCLI publicationCLI = new PublicationCLI(scanner);
@@ -65,10 +67,10 @@ public class NewspaperCLI {
                     //customerCLI.showMenu(customerData);
                     break;
                 case 2:
-                    publicationCLI.showMenu(publicationData);
+                    publicationCLI.showMenu(publications);
                     break;
                 case 3:
-                    orderCLI.showMenu(orderData);
+                    //orderCLI.showMenu(orderData);
                     break;
                 case 4:
                     //deliveryDocketCLI.showMenu(deliveryDocketData);
@@ -83,7 +85,7 @@ public class NewspaperCLI {
                     //userCLI.showMenu(UserData);
                     break;
                 case 8:
-                    publicationCLI.showLowStockAlerts(publicationData);
+                    //publicationCLI.showLowStockAlerts(publicationData);
                     break;
                 case 0:
                     System.out.println("Where do you think your going? There's work to do!!!");
@@ -104,5 +106,16 @@ public class NewspaperCLI {
         } catch (NumberFormatException ex) {
             return -1;
         }
+    }
+    
+    private static <T> ArrayList<T> createObjects(
+            ArrayList<LinkedHashMap<String, Object>> rows,
+            Function<LinkedHashMap<String, Object>, T> factory) {
+
+        ArrayList<T> objects = new ArrayList<>();
+        for (LinkedHashMap<String, Object> row : rows) {
+            objects.add(factory.apply(row));
+        }
+        return objects;
     }
 }
