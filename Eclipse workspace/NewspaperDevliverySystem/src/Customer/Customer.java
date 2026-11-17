@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Customer implements DataProvider{
 
-	private int customerId;
+	private final int customerId;
 	private String name;
 	private String address;
 	private String contact;
@@ -37,14 +37,33 @@ public class Customer implements DataProvider{
 	public String getContact() {return contact;}
 
 
-	public void setCustomerId(int customerId) {this.customerId = customerId;}
+	public void setName(String name) {
+		if(verifyName(name)) {
+			this.name = name;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid Name");
+		}
+	}
+			
 
-	public void setName(String name) {this.name = name;}
+	public void setAddress(String address) {
+		if(verifyAddress(address)) {
+			this.address = address;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid Address");
+		}
+	}
 
-	public void setAddress(String address) {this.address = address;}
-
-
-	public void setContact(String contact) {this.contact = contact;}
+	public void setContact(String contact) {
+		if(verifyContact(contact)) {
+			this.contact = contact;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid Contact");
+		}
+	}
 
 	@Override
 	public String toString() {
@@ -80,29 +99,19 @@ public class Customer implements DataProvider{
         return false;
     }
 
-	//public Customer readCustomer(){
-	//	return this;
-	//}
-
-	public boolean updateCustomer(String name, String address, String contact){
+	public void updateCustomer(String name, String address, String contact){
 		if(this.verifyName(name)
         && this.verifyAddress(address)
         && this.verifyContact(contact)){
             setName(name);
 			setAddress(address);
 			setContact(contact);
-            return true;
         }
-        return false;
+		else {
+			throw new IllegalArgumentException("Invalid customer details");
+		}
+        
     }
-
-	//public boolean deleteCustomer(int customerId){
-	//	if(readCustomer(customerId) != null){
-	//		customers.remove(customerId);
-	//		return true;
-	//	}
-	//		return false;
-	//}
 	
 	public LinkedHashMap<String,Object> getData(){
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
