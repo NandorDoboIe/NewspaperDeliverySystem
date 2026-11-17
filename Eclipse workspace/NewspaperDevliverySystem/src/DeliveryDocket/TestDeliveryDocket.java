@@ -58,4 +58,28 @@ public class TestDeliveryDocket {
 		DeliveryDocket del = new DeliveryDocket();
 	    assertFalse(del.verifyCustomerId(-21));
 	}
+	
+	@Test
+	void createDeliveryDocket_TC10() {
+		DeliveryDocket del = new DeliveryDocket();
+
+        assertTrue(del.createDeliveryDocket(1, 22,33));
+
+        assertNotNull(del.readDeliveryDocket(1));
+        assertEquals(22, del.readDeliveryDocket(1).getOrder_id());
+        assertEquals(33, del.readDeliveryDocket(1).getCustomer_id());
+	}
+	
+	@Test
+	void readDeliveryDocket_TC11() {
+		DeliveryDocket del = new DeliveryDocket();
+
+        del.createDeliveryDocket(2, 33,44);
+
+        DeliveryDocket result = del.readDeliveryDocket(2);
+
+        assertNotNull(result);
+        assertEquals(33, result.getOrder_id());
+        assertEquals(44, result.getCustomer_id());
+	}
 }
