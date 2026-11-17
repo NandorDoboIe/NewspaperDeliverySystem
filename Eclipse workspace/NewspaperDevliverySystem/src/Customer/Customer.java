@@ -37,30 +37,33 @@ public class Customer implements DataProvider{
 	public String getContact() {return contact;}
 
 
-	public boolean setName(String name) {
+	public void setName(String name) {
 		if(verifyName(name)) {
 			this.name = name;
-			return true;
 		}
-		return false;
+		else {
+			throw new IllegalArgumentException("Invalid Name");
+		}
 	}
 			
 
-	public boolean setAddress(String address) {
+	public void setAddress(String address) {
 		if(verifyAddress(address)) {
 			this.address = address;
-			return true;
 		}
-		return false;
+		else {
+			throw new IllegalArgumentException("Invalid Address");
+		}
 	}
 
-	public boolean setContact(String contact) {
+	public void setContact(String contact) {
 		if(verifyContact(contact)) {
 			this.contact = contact;
-			return true;
 		}
-		return false;
+		else {
+			throw new IllegalArgumentException("Invalid Contact");
 		}
+	}
 
 	@Override
 	public String toString() {
@@ -96,16 +99,18 @@ public class Customer implements DataProvider{
         return false;
     }
 
-	public boolean updateCustomer(String name, String address, String contact){
+	public void updateCustomer(String name, String address, String contact){
 		if(this.verifyName(name)
         && this.verifyAddress(address)
         && this.verifyContact(contact)){
             setName(name);
 			setAddress(address);
 			setContact(contact);
-            return true;
         }
-        return false;
+		else {
+			throw new IllegalArgumentException("Invalid customer details");
+		}
+        
     }
 	
 	public LinkedHashMap<String,Object> getData(){
