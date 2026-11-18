@@ -47,7 +47,7 @@ public class Customer implements DataProvider{
 
 	
 	public void setDeliveryAreaId(int deliveryAreaId) {
-		if(verifyDeliveryAreaId(deliveryAreaId)) {
+		if(verifyId(deliveryAreaId)) {
 			this.deliveryAreaId = deliveryAreaId;
 		}
 		else {
@@ -82,20 +82,16 @@ public class Customer implements DataProvider{
 			throw new IllegalArgumentException("Invalid Contact");
 		}
 	}
-
+	
+	
 	@Override
 	public String toString() {
-		return "Customer ID: " + customerId + " | Name: " + name + " | Address: "
-				+ address + " | Contact: " + contact;
+		return "Customer ID: " + customerId + " | Delivery Area ID: " + deliveryAreaId +  " | Name: " + name + 
+				" | Address: " + address + " | Contact: " + contact;
 	}
 	
 	
-	
-	private boolean verifyId(int id) {
-		return id >= 0;
-	}
-	
-	private boolean verifyDeliveryAreaId(int id) {
+	private boolean verifyId(int id) {	
 		return id >= 0;
 	}
 	
@@ -117,7 +113,7 @@ public class Customer implements DataProvider{
 		if(contact == null) {
 			return false;
 		}
-        if(contact.length() == 10){
+        if(contact.length() >= 7 && contact.length() <= 11){
             return StringUtils.isNumeric(contact);
         }
         return false;
@@ -128,7 +124,7 @@ public class Customer implements DataProvider{
 		setAddress(address);
 		setContact(contact);
     }
- 
+	
 	
 	public LinkedHashMap<String,Object> getData(){
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
