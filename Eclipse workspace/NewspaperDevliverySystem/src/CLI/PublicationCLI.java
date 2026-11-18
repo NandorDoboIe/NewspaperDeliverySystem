@@ -12,7 +12,7 @@ public class PublicationCLI {
 
     // ---- Entity configuration: change these when porting to another object ----
     private static final String TABLE = "publications";
-    private static final String ID_KEY = "publicationsId";
+    private static final String ID_KEY = "publicationId";
     private static final String ENTITY = "Publication";
     private static final String ENTITY_PLURAL = "Publications";
     private static final List<String> FIELDS = List.of("name", "type", "cost", "stock");

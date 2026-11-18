@@ -8,6 +8,7 @@ import java.util.function.Function;
 import Customer.Customer;
 import Publication.Publication;
 import Database.DAO;
+import Order.Order;
 
 public class NewspaperCLI {
 
@@ -24,22 +25,22 @@ public class NewspaperCLI {
     	
     	ArrayList<Customer> customers = createObjects(dao.readTable("customers"),Customer::new);
     	ArrayList<Publication> publications = createObjects(dao.readTable("publications"),Publication::new);
-    	/**ArrayList<Publication> orders = createObjects(dao.readTable("orders"),Publication::new);
-    	ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDockets"),Publication::new);
+    	ArrayList<Order> orders = createObjects(dao.readTable("orders"),Order::new);
+    	/**ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDockets"),Publication::new);
     	ArrayList<Publication> bills = createObjects(dao.readTable("bills"),Publication::new);
     	ArrayList<Publication> deliveryAreas = createObjects(dao.readTable("deliveryAreas"),Publication::new);
     	ArrayList<Publication> users = createObjects(dao.readTable("users"),Publication::new);*/
     	
     	
     	//mainMenu(customers,publications,orders,deliveryDockets,bills,deliveryAreas,users);
-    	mainMenu(customers,publications);
+    	mainMenu(customers,publications,orders);
     }
     
     private static void mainMenu(
     		ArrayList<Customer> customers,
-            ArrayList<Publication> publications
-            /**ArrayList<LinkedHashMap<String, Object>> orders,
-            ArrayList<LinkedHashMap<String, Object>> deliveryDockets,
+            ArrayList<Publication> publications,
+            ArrayList<Order> orders
+            /**ArrayList<LinkedHashMap<String, Object>> deliveryDockets,
             ArrayList<LinkedHashMap<String, Object>> bills,
             ArrayList<LinkedHashMap<String, Object>> deliveryAreas,
             ArrayList<LinkedHashMap<String, Object>> users*/) {
@@ -72,7 +73,7 @@ public class NewspaperCLI {
                     publicationCLI.showMenu(publications);
                     break;
                 case 3:
-                    //orderCLI.showMenu(orderData);
+                    orderCLI.showMenu(orders);
                     break;
                 case 4:
                     //deliveryDocketCLI.showMenu(deliveryDocketData);
