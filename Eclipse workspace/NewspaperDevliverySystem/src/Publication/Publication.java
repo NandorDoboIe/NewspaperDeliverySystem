@@ -29,7 +29,7 @@ public class Publication implements DataProvider {
         this.stock = stock;
     }
 
-    //ID may be absent before insertion.
+    // Works with DAOID . may be absent before insertion
     public Publication(LinkedHashMap<String, Object> row) {
         this(
             optionalId(row),
@@ -50,28 +50,28 @@ public class Publication implements DataProvider {
     public int getCost() { return cost; }
     public int getStock() { return stock; }
 
-    public boolean verifyName(String value) {
+    private boolean verifyName(String value) {
         return value != null && !value.trim().isEmpty() && value.trim().length() <= 150;
     }
 
-    public boolean verifyType(String value) {
+    private boolean verifyType(String value) {
         return value != null && !value.trim().isEmpty() && value.trim().length() <= 150;
     }
 
-    public boolean verifyCost(Integer value) {
+    private boolean verifyCost(Integer value) {
         return value != null && value > 0;
     }
 
-    public boolean verifyStock(Integer value) {
+    private boolean verifyStock(Integer value) {
         return value != null && value >= 0;
     }
 
-    public boolean verifyDetails(String name, String type, Integer cost, Integer stock) {
+    private boolean verifyDetails(String name, String type, Integer cost, Integer stock) {
         return getValidationErrors(name, type, cost, stock).isEmpty();
     }
 
     // Checks all fields
-    public List<String> getValidationErrors(String name, String type, Integer cost, Integer stock) {
+    private List<String> getValidationErrors(String name, String type, Integer cost, Integer stock) {
         List<String> errors = new ArrayList<>();
 
         if (name == null || name.trim().isEmpty()) {
@@ -101,17 +101,17 @@ public class Publication implements DataProvider {
         return errors;
     }
 
-    public List<String> getValidationErrors() {
+    private List<String> getValidationErrors() {
         return getValidationErrors(name, type, cost, stock);
     }
 
-    // Returns text suitable for displaying directly in the CLI.
-    public String getValidationMessage(String name, String type, Integer cost, Integer stock) {
+    // Returns text for the CLI.
+    private String getValidationMessage(String name, String type, Integer cost, Integer stock) {
         List<String> errors = getValidationErrors(name, type, cost, stock);
         return errors.isEmpty() ? "Publication details are valid." : String.join(" ", errors);
     }
 
-    public String getValidationMessage() {
+    private String getValidationMessage() {
         return getValidationMessage(name, type, cost, stock);
     }
 
@@ -119,7 +119,7 @@ public class Publication implements DataProvider {
         return stock < 5;
     }
 
-    public boolean verifyRestock(int quantity) {
+    private boolean verifyRestock(int quantity) {
         return quantity > 0 && (long) stock + quantity <= Integer.MAX_VALUE;
     }
 
