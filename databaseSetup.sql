@@ -1,14 +1,15 @@
 CREATE DATABASE newsPaperSystemDatabase;
 
-CREATE TABLE newsPaperSystemDatabase.customers (
+CREATE TABLE newsPaperSystemDatabase.customer (
     customerId INT AUTO_INCREMENT PRIMARY KEY,
-    name       VARCHAR(150) NOT NULL,
+    firstname       VARCHAR(150) NOT NULL,
+    surname       VARCHAR(150) NOT NULL,
     address    VARCHAR(150) NOT NULL,
     contact    VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE newsPaperSystemDatabase.publications (
-    publicationId INT AUTO_INCREMENT PRIMARY KEY,
+    publicationsId INT AUTO_INCREMENT PRIMARY KEY,
     name  VARCHAR(150) NOT NULL,
     type  VARCHAR(150) NOT NULL,
     cost  INT          NOT NULL,
@@ -16,28 +17,28 @@ CREATE TABLE newsPaperSystemDatabase.publications (
 );
 
 CREATE TABLE newsPaperSystemDatabase.orders (
-    orderId       INT AUTO_INCREMENT PRIMARY KEY,
+    ordersId       INT AUTO_INCREMENT PRIMARY KEY,
     publicationId INT          NOT NULL,
     customerId    INT          NOT NULL,
     pattern        VARCHAR(150) NOT NULL,
-    FOREIGN KEY (publicationId) REFERENCES publications(publicationId),
-    FOREIGN KEY (customerId)    REFERENCES customers(customerId)
+    FOREIGN KEY (publicationId) REFERENCES publications(publicationsId),
+    FOREIGN KEY (customerId)    REFERENCES customer(customerId)
 );
 
-CREATE TABLE newsPaperSystemDatabase.deliveryDockets (
+CREATE TABLE newsPaperSystemDatabase.deliveryDocket (
     deliveryDocketId INT AUTO_INCREMENT PRIMARY KEY,
     orderId         INT NOT NULL,
     customerId      INT NOT NULL,
-    FOREIGN KEY (orderId)    REFERENCES orders(orderId),
-    FOREIGN KEY (customerId) REFERENCES customers(customerId)
+    FOREIGN KEY (orderId)    REFERENCES orders(ordersId),
+    FOREIGN KEY (customerId) REFERENCES customer(customerId)
 );
 
-CREATE TABLE newsPaperSystemDatabase.deliveryAreas (
+CREATE TABLE newsPaperSystemDatabase.deliveryArea (
     deliveryAreaId INT AUTO_INCREMENT PRIMARY KEY,
     location       VARCHAR(150) NOT NULL
 );
 
-CREATE TABLE newsPaperSystemDatabase.users (
+CREATE TABLE newsPaperSystemDatabase.user (
     userId       INT AUTO_INCREMENT PRIMARY KEY,
     name         VARCHAR(150) NOT NULL,
     password     VARCHAR(150) NOT NULL,
@@ -45,10 +46,10 @@ CREATE TABLE newsPaperSystemDatabase.users (
     access_level VARCHAR(150) NOT NULL
 );
 
-CREATE TABLE newsPaperSystemDatabase.bills (
+CREATE TABLE newsPaperSystemDatabase.bill (
     billId      INT AUTO_INCREMENT PRIMARY KEY,
     customerId INT NOT NULL,
     orderId    INT NOT NULL,
-    FOREIGN KEY (customerId) REFERENCES customers(customerId),
-    FOREIGN KEY (orderId)    REFERENCES orders(orderId)
+    FOREIGN KEY (customerId) REFERENCES customer(customerId),
+    FOREIGN KEY (orderId)    REFERENCES orders(ordersId)
 );
