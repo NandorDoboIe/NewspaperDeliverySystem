@@ -1,0 +1,102 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class OrderTest {
+
+    @Test
+    public void testOrderID() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        assertEquals(1, order.getOrderID());
+    }
+
+    @Test
+    public void testCustomerID() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        assertEquals(101, order.getCustomerID());
+    }
+
+    @Test
+    public void testPublicationID() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        assertEquals(201, order.getPublicationID());
+    }
+
+    @Test
+    public void testDeliveryPattern() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        assertArrayEquals(pattern, order.getDeliveryPattern());
+    }
+
+    @Test
+    public void testUpdatePublicationID() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        order.setPublicationID(202);
+
+        assertEquals(202, order.getPublicationID());
+    }
+
+    @Test
+    public void testUpdateDeliveryPattern() {
+        boolean[] originalPattern = {
+            true, true, false, true, true, false, false
+        };
+
+        boolean[] newPattern = {
+            false, false, false, false, false, true, true
+        };
+
+        Order order = new Order(1, 101, 201, originalPattern);
+
+        order.setDeliveryPattern(newPattern);
+
+        assertArrayEquals(newPattern, order.getDeliveryPattern());
+    }
+
+    @Test
+    public void testMondayDeliveryIsOn() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        assertTrue(order.getDeliveryPattern()[0]);
+    }
+
+    @Test
+    public void testWednesdayDeliveryIsOff() {
+        boolean[] pattern = {
+            true, true, false, true, true, false, false
+        };
+
+        Order order = new Order(1, 101, 201, pattern);
+
+        assertFalse(order.getDeliveryPattern()[2]);
+    }
+}
