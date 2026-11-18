@@ -25,7 +25,7 @@ public class Order implements DataProvider {
         this.deliveryPattern = Arrays.copyOf(deliveryPattern, 7);
     }
 
-    // ID may be absent before insert
+    // ID may be absent before insertion
     public Order(LinkedHashMap<String, Object> row) {
         this(
             optionalId(row),
@@ -47,10 +47,10 @@ public class Order implements DataProvider {
     public int getPublicationID() { return publicationId; }
     public boolean[] getDeliveryPattern() { return Arrays.copyOf(deliveryPattern, 7); }
 
-    public boolean verifyCustomerID(int id) { return id > 0; }
-    public boolean verifyPublicationID(int id) { return id > 0; }
+    private boolean verifyCustomerID(int id) { return id > 0; }
+    private boolean verifyPublicationID(int id) { return id > 0; }
 
-    public boolean verifyDeliveryPattern(boolean[] days) {
+    private boolean verifyDeliveryPattern(boolean[] days) {
         if (days == null || days.length != 7) {
             return false;
         }
@@ -62,8 +62,8 @@ public class Order implements DataProvider {
         return false;
     }
 
-    // Checks all fields, rather than stopping at the first inv.
-    public List<String> getValidationErrors(int ordersId, int customerId,
+    // Checks all fields, 
+    private List<String> getValidationErrors(int ordersId, int customerId,
                                              int publicationId, boolean[] days) {
         List<String> errors = new ArrayList<>();
 
@@ -86,22 +86,22 @@ public class Order implements DataProvider {
         return errors;
     }
 
-    public List<String> getValidationErrors() {
+    private List<String> getValidationErrors() {
         return getValidationErrors(ordersId, customerId, publicationId, deliveryPattern);
     }
 
-    public boolean verifyDetails(int ordersId, int customerId,
+    private boolean verifyDetails(int ordersId, int customerId,
                                  int publicationId, boolean[] days) {
         return getValidationErrors(ordersId, customerId, publicationId, days).isEmpty();
     }
 
-    public String getValidationMessage(int ordersId, int customerId,
+    private String getValidationMessage(int ordersId, int customerId,
                                        int publicationId, boolean[] days) {
         List<String> errors = getValidationErrors(ordersId, customerId, publicationId, days);
         return errors.isEmpty() ? "Order details are valid." : String.join(" ", errors);
     }
 
-    public String getValidationMessage() {
+    private String getValidationMessage() {
         return getValidationMessage(ordersId, customerId, publicationId, deliveryPattern);
     }
 
@@ -115,7 +115,7 @@ public class Order implements DataProvider {
         this.deliveryPattern = Arrays.copyOf(newPattern, 7);
     }
 
-    // Seven characters stored in MySQL; Mon/Wed/Fri = "1010100".
+    // 7 chars stored in MySQL; Mon/Wed/Fri = "1010100".
     public String getPatternString() {
         StringBuilder result = new StringBuilder(7);
         for (boolean day : deliveryPattern) {
