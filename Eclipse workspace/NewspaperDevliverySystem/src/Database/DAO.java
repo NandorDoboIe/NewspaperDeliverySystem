@@ -15,7 +15,7 @@ import java.sql.Statement;
 
 public class DAO {
 	
-	private static final Set<String> ALLOWED_TABLES = Set.of("customer","publications","orders","deliveryDocket","deliveryArea","user","bill");
+	private static final Set<String> ALLOWED_TABLES = Set.of("customers","publications","orders","deliveryDocket","deliveryArea","user","bill");
 	
 
 	  public int addData(String tableName, DataProvider entity) {
@@ -92,7 +92,7 @@ public class DAO {
 		checkForAllowedTables(tableName);
 		
 		
-		String sql = "DELETE from newspapersystemdatabase."+tableName+" WHERE  "+tableName+"Id="+id;
+		String sql = "DELETE from newspapersystemdatabase."+tableName+" WHERE  "+tableName.substring(0, tableName.length() - 1)+"Id="+id;
 		
 		try(Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -126,10 +126,10 @@ public class DAO {
 	          }
 	          setClause.append(column).append(" = ?");
 	      }
-
+	      
 	      String sql = "UPDATE newspapersystemdatabase." + tableName
 	              + " SET " + setClause
-	              + " WHERE " + tableName + "Id = ?";
+	              + " WHERE " + tableName.substring(0, tableName.length() - 1) + "Id = ?";
 
 	      try (Connection conn = DatabaseConnection.getConnection();
 	           PreparedStatement stmt = conn.prepareStatement(sql)) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 import java.util.function.Function;
+
+import Customer.Customer;
 import Publication.Publication;
 import Database.DAO;
 
@@ -20,21 +22,21 @@ public class NewspaperCLI {
     	DAO dao = new DAO();
     	
     	
-    	//ArrayList<Publication> customers = createObjects(dao.readTable("customer"),Publication::new);
+    	ArrayList<Customer> customers = createObjects(dao.readTable("customers"),Customer::new);
     	ArrayList<Publication> publications = createObjects(dao.readTable("publications"),Publication::new);
     	/**ArrayList<Publication> orders = createObjects(dao.readTable("orders"),Publication::new);
-    	ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDocket"),Publication::new);
-    	ArrayList<Publication> bills = createObjects(dao.readTable("bill"),Publication::new);
-    	ArrayList<Publication> deliveryAreas = createObjects(dao.readTable("deliveryArea"),Publication::new);
-    	ArrayList<Publication> users = createObjects(dao.readTable("user"),Publication::new);*/
+    	ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDockets"),Publication::new);
+    	ArrayList<Publication> bills = createObjects(dao.readTable("bills"),Publication::new);
+    	ArrayList<Publication> deliveryAreas = createObjects(dao.readTable("deliveryAreas"),Publication::new);
+    	ArrayList<Publication> users = createObjects(dao.readTable("users"),Publication::new);*/
     	
     	
     	//mainMenu(customers,publications,orders,deliveryDockets,bills,deliveryAreas,users);
-    	mainMenu(publications);
+    	mainMenu(customers,publications);
     }
     
     private static void mainMenu(
-    		//ArrayList<> customers,
+    		ArrayList<Customer> customers,
             ArrayList<Publication> publications
             /**ArrayList<LinkedHashMap<String, Object>> orders,
             ArrayList<LinkedHashMap<String, Object>> deliveryDockets,
@@ -42,7 +44,7 @@ public class NewspaperCLI {
             ArrayList<LinkedHashMap<String, Object>> deliveryAreas,
             ArrayList<LinkedHashMap<String, Object>> users*/) {
     	
-        //CustomerCLI customerCLI = new CustomerCLI(scanner);
+        CustomerCLI customerCLI = new CustomerCLI(scanner);
         PublicationCLI publicationCLI = new PublicationCLI(scanner);
         OrderCLI orderCLI = new OrderCLI(scanner);
         //DeliveryDocketCLI deliveryDocketCLI = new DeliveryDocketCLI(scanner);
@@ -64,7 +66,7 @@ public class NewspaperCLI {
 
             switch (readChoice()) {
                 case 1:
-                    //customerCLI.showMenu(customerData);
+                    customerCLI.showMenu(customers);
                     break;
                 case 2:
                     publicationCLI.showMenu(publications);

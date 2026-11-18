@@ -10,6 +10,16 @@ import Publication.Publication;
 
 public class PublicationCLI {
 
+    // ---- Entity configuration: change these when porting to another object ----
+    private static final String TABLE = "publications";
+    private static final String ID_KEY = "publicationsId";
+    private static final String ENTITY = "Publication";
+    private static final String ENTITY_PLURAL = "Publications";
+    private static final List<String> FIELDS = List.of("name", "type", "cost", "stock");
+    // ----------------------------------------------------------------------------
+
+    private static final int LOW_STOCK_THRESHOLD = 5;
+
     private final Scanner scanner;
 
     public PublicationCLI(Scanner scanner) {
@@ -18,96 +28,75 @@ public class PublicationCLI {
 
     public void showMenu(ArrayList<Publication> publications) {
         while (true) {
-            System.out.println("\n## PUBLICATIONS ##");
-            System.out.println("1. Create Publication");
-            System.out.println("2. View Publications");
-            System.out.println("3. Update Publication");
-            System.out.println("4. Delete Publication");
-            System.out.println("5. Restock Publication");
+            System.out.println("## " + ENTITY_PLURAL.toUpperCase() + " ##");
+            System.out.println("1. Create " + ENTITY);
+            System.out.println("2. View " + ENTITY_PLURAL);
+            System.out.println("3. Update " + ENTITY);
+            System.out.println("4. Delete " + ENTITY);
+            System.out.println("5. Restock " + ENTITY);
             System.out.println("0. Back to Main Menu");
             showLowStockAlerts(publications);
-            
 
             switch (readChoice()) {
-                case 1:
-                    createPublication(publications);
-                    break;
-                case 2:
-                    viewPublications(publications);
-                    break;
-                case 3:
-                    updatePublication(publications);
-                    break;
-                case 4:
-                    deletePublication(publications);
-                    break;
-                case 5:
-                    restockPublication(publications);
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Invalid choice. Enter a menu number.");
+            case 1:
+                createPublication(publications);
+                break;
+            case 2:
+                viewPublications(publications);
+                break;
+            case 3:
+                updatePublication(publications);
+                break;
+            case 4:
+                deletePublication(publications);
+                break;
+            case 5:
+                restockPublication(publications);
+                break;
+            case 0:
+                return;
+            default:
+                System.out.println("Invalid choice. Enter a menu number.");
             }
         }
     }
 
     private void createPublication(ArrayList<Publication> publications) {
-        
-        ArrayList<String> variables = new ArrayList<String>(List.of("name","type","cost","stock"));
-        LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
-        userInput = takeUserInput(variables);
-        
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
         try {
-        	Publication newPublication = new Publication(userInput);
-            System.out.println(newPublication.toString());
-           
-            DAO dao = new DAO();
-            int newId = dao.addData("publications", newPublication);
-            if(newId<=0) {
-            	System.out.println("Insert failed");
-            	return;
+            Publication newPublication = new Publication(input); // validates
+            int newId = new DAO().addData(TABLE, newPublication);
+            if (newId <= 0) {
+                System.out.println("Insert failed");
+                return;
             }
-            userInput.put("publicationsId",newId);
-            Publication saved = new Publication(userInput);
+            input.put(ID_KEY, newId);
+            Publication saved = new Publication(input);
             publications.add(saved);
-            System.out.println("Publication created and uploaded to the database successfully");
-            System.out.println(saved.toString());
+            System.out.println(ENTITY + " created and uploaded to the database successfully");
+            System.out.println(saved);
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     private void viewPublications(ArrayList<Publication> publications) {
-        if(publications.isEmpty()) {
-        	System.out.println("Publications is empty");
-        	return;
+        if (publications.isEmpty()) {
+            System.out.println(ENTITY_PLURAL + " is empty");
+            return;
         }
-        publications.forEach(publication -> System.out.println(publication.toString()));
+        publications.forEach(System.out::println);
     }
 
     private void updatePublication(ArrayList<Publication> publications) {
-    	DAO dao = new DAO();
-        viewPublications(publications);
-        System.out.print("Id of the publication to update: ");
-        int id;
-        try {
-            id = Integer.parseInt(scanner.nextLine().trim());
-        } catch (NumberFormatException ex) {
-            System.out.println("Invalid id.");
-            return;
-        }
-        Publication existing = findPublication(publications, id);
-        if (existing == null) {
-            System.out.println("No publication with id " + id);
-            return;
-        }
+        Publication existing = selectPublication(publications, "update");
+        if (existing == null) return;
 
-        LinkedHashMap<String, Object> input = takeUserInput(new ArrayList<>(List.of("name", "type", "cost", "stock")));
-        input.put("publicationsId", id);
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+        input.put(ID_KEY, existing.getPublicationID());
         try {
-            Publication updated = new Publication(input);     // validates
-            if (dao.editRow("publications", updated, id)) {
+            Publication updated = new Publication(input); // validates
+            if (new DAO().editRow(TABLE, updated, existing.getPublicationID())) {
                 publications.set(publications.indexOf(existing), updated);
                 System.out.println("Updated: " + updated);
             } else {
@@ -119,49 +108,35 @@ public class PublicationCLI {
     }
 
     private void deletePublication(ArrayList<Publication> publications) {
-        viewPublications(publications);
-        DAO dao = new DAO();
-        System.out.print("Id of the publication to delete: ");
-        int id;
-        try {
-            id = Integer.parseInt(scanner.nextLine().trim());
-        } catch (NumberFormatException ex) {
-            System.out.println("Invalid id.");
-            return;
-        }
-        Publication existing = findPublication(publications, id);
-        if (existing == null) {
-            System.out.println("No publication with id " + id);
-            return;
-        }
-        if (dao.deleteRow("publications", id)) {
+        Publication existing = selectPublication(publications, "delete");
+        if (existing == null) return;
+
+        if (new DAO().deleteRow(TABLE, existing.getPublicationID())) {
             publications.remove(existing);
             System.out.println("Deleted.");
         } else {
             System.out.println("Delete failed");
         }
     }
-    
-    private void restockPublication(ArrayList<Publication> publications) {
-    	viewPublications(publications);
-        DAO dao = new DAO();
-        Publication restockingPublication = findByIdHandler(publications);
 
-        LinkedHashMap<String, Object> input = takeUserInput(new ArrayList<>(List.of("stock")));
-        
-        restockingPublication.updateDetails(restockingPublication.getName(),restockingPublication.getType(),restockingPublication.getCost(),toInt(input.get("stock")));
+    private void restockPublication(ArrayList<Publication> publications) {
+        Publication existing = selectPublication(publications, "restock");
+        if (existing == null) return;
+
+        LinkedHashMap<String, Object> input = takeUserInput(List.of("stock"));
+        try {
+            int stock = Integer.parseInt(input.get("stock").toString());
+            existing.updateDetails(existing.getName(), existing.getType(), existing.getCost(), stock);
+        } catch (IllegalArgumentException ex) { // also covers NumberFormatException
+            System.out.println("Invalid stock: " + ex.getMessage());
+        }
     }
 
     public void showLowStockAlerts(ArrayList<Publication> publications) {
-    	if(publications.isEmpty()) {
-        	System.out.println("Publications is empty");
-        	return;
-        }
-        publications.forEach(publication -> {
-        	if(publication.getStock()<5) {
-        		System.out.println("Stock of "+ publication.getName()+" (id: "+ publication.getPublicationID() +") is lock please restock!");
-        	}
-        });
+        publications.stream()
+                .filter(p -> p.getStock() < LOW_STOCK_THRESHOLD)
+                .forEach(p -> System.out.println("Stock of " + p.getName()
+                        + " (id: " + p.getPublicationID() + ") is low, please restock!"));
     }
 
     private int readChoice() {
@@ -175,39 +150,21 @@ public class PublicationCLI {
             return -1;
         }
     }
-    private LinkedHashMap<String, Object> takeUserInput(ArrayList<String> variables) {
-		LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
-		userInput.put("publicationsId", 0);
-		variables.forEach(variable -> {
-			System.out.print("Please enter "+variable+": ");
-			String input = scanner.nextLine().trim();
-			userInput.put(variable, input);
-		});
-		
-		return userInput;
-	}
-    
-    private Publication findPublication(ArrayList<Publication> publications, int targetId) {
-    	for(Publication p: publications) {
-    		if(p.getPublicationID() == targetId) {
-    			return p;
-    		}
-    	}
-    	return null;
+
+    private LinkedHashMap<String, Object> takeUserInput(List<String> fields) {
+        LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
+        userInput.put(ID_KEY, 0);
+        for (String field : fields) {
+            System.out.print("Please enter " + field + ": ");
+            userInput.put(field, scanner.nextLine().trim());
+        }
+        return userInput;
     }
-    private int toInt(Object value) {
-	    if (value instanceof Number) {
-	      return ((Number) value).intValue();
-	    }
-	    try {
-	      return Integer.parseInt(String.valueOf(value).trim());
-	    } catch (NumberFormatException ex) {
-	      throw new IllegalArgumentException("Invalid number: " + value);
-	    }
-	}
-    
-    private Publication findByIdHandler(ArrayList<Publication> publications) {
-    	System.out.print("Id of the publication to restock: ");
+
+    /** Lists items, asks for an id, and returns the match, or null (after printing why). */
+    private Publication selectPublication(ArrayList<Publication> publications, String action) {
+        viewPublications(publications);
+        System.out.print("Id of the " + ENTITY.toLowerCase() + " to " + action + ": ");
         int id;
         try {
             id = Integer.parseInt(scanner.nextLine().trim());
@@ -215,11 +172,12 @@ public class PublicationCLI {
             System.out.println("Invalid id.");
             return null;
         }
-        Publication existing = findPublication(publications, id);
-        if (existing == null) {
-            System.out.println("No publication with id " + id);
-            return null;
+        for (Publication p : publications) {
+            if (p.getPublicationID() == id) {
+                return p;
+            }
         }
-        return existing;
+        System.out.println("No " + ENTITY.toLowerCase() + " with id " + id);
+        return null;
     }
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
+import Database.DataProvider;
+
 public class Customer implements DataProvider{
 
 	private final int customerId;
@@ -72,12 +74,14 @@ public class Customer implements DataProvider{
 
 	@Override
 	public String toString() {
-		return "Customer ID: " + customerId + "\nName: " + name + "\nAddress: "
-				+ address + "\nContact: " + contact;
+		return "Customer ID: " + customerId + " | Name: " + name + " | Address: "
+				+ address + " | Contact: " + contact;
 	}
 	
+	
+	
 	private boolean verifyId(int id) {
-		return id > 0;
+		return id >= 0;
 	}
 	
 	private boolean verifyName(String name){
@@ -120,6 +124,7 @@ public class Customer implements DataProvider{
 	}
 	
 	private static int toInt(Object value) {
+		System.out.println(value);
 	    if (value instanceof Number) {
 	      return ((Number) value).intValue();
 	    }
