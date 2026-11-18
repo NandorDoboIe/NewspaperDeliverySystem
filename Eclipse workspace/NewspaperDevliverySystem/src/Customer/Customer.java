@@ -1,9 +1,6 @@
 package Customer;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import Database.DataProvider;
@@ -11,31 +8,36 @@ import Database.DataProvider;
 public class Customer implements DataProvider{
 
 	private final int customerId;
+	private int deliveryAreaId;
 	private String name;
 	private String address;
 	private String contact;
 	
 	public Customer(LinkedHashMap<String, Object> row) {
 		 this(toInt(row.get("customerId")),
+				 toInt(row.get("customerId")),
 		         (String) row.get("name"),
 		         (String) row.get("address"),
 		         (String) row.get("contact"));
 	}
 	
-	public Customer(int customerId, String name, String address, String contact) {
+	public Customer(int customerId, int deliveryAreaId ,String name, String address, String contact) {
 		if(verifyId(customerId)) {
 			this.customerId = customerId;
 		}
 		else {
 			throw new IllegalArgumentException("Invalid ID");
 		}
+		setDeliveryAreaId(deliveryAreaId);
 		setName(name);
 		setAddress(address);
 		setContact(contact);
 	}
 	
-
+	
 	public int getCustomerId() {return customerId;}
+	
+	public int getDeliveryAreaId() {return deliveryAreaId;}
 	
 	public String getName() {return name;}
 	
@@ -43,7 +45,16 @@ public class Customer implements DataProvider{
 	
 	public String getContact() {return contact;}
 
-
+	
+	public void setDeliveryAreaId(int deliveryAreaId) {
+		if(verifyDeliveryAreaId(deliveryAreaId)) {
+			this.deliveryAreaId = deliveryAreaId;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid Delivery Area ID");
+		}
+	}
+	
 	public void setName(String name) {
 		if(verifyName(name)) {
 			this.name = name;
@@ -84,6 +95,10 @@ public class Customer implements DataProvider{
 		return id >= 0;
 	}
 	
+	private boolean verifyDeliveryAreaId(int id) {
+		return id >= 0;
+	}
+	
 	private boolean verifyName(String name){
 		if(name == null) {
 			return false;
@@ -112,11 +127,12 @@ public class Customer implements DataProvider{
         setName(name);
 		setAddress(address);
 		setContact(contact);
-       }
+    }
  
 	
 	public LinkedHashMap<String,Object> getData(){
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
+		data.put("deliveryAreaId", this.getDeliveryAreaId());
 		data.put("name",this.getName());
 		data.put("address",this.getAddress());
 		data.put("contact",this.getContact());
