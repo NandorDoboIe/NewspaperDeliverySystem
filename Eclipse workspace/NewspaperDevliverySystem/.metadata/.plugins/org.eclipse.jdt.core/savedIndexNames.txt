@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+C:\Users\A00328245\Documents\GitHub\NewspaperDeliverySystem\Eclipse workspace\NewspaperDevliverySystem\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+1067094681.index
+1698031012.index
+4257464547.index
