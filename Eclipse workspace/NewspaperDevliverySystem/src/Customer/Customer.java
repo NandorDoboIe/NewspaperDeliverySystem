@@ -12,21 +12,26 @@ public class Customer implements DataProvider{
 	private String name;
 	private String address;
 	private String contact;
-
+	
+	public Customer(LinkedHashMap<String, Object> row) {
+		 this(toInt(row.get("customerId")),
+		         (String) row.get("name"),
+		         (String) row.get("address"),
+		         (String) row.get("contact"));
+	}
+	
 	public Customer(int customerId, String name, String address, String contact) {
-		if(verifyId(customerId)
-		        && verifyName(name)
-		        && verifyAddress(address)
-		        && verifyContact(contact)){
+		if(verifyId(customerId)) {
 			this.customerId = customerId;
-			this.name = name;
-			this.address = address;
-			this.contact = contact;
 		}
 		else {
-			throw new IllegalArgumentException("Invalid customer details");
+			throw new IllegalArgumentException("Invalid ID");
 		}
+		setName(name);
+		setAddress(address);
+		setContact(contact);
 	}
+	
 
 	public int getCustomerId() {return customerId;}
 	
@@ -100,18 +105,11 @@ public class Customer implements DataProvider{
     }
 
 	public void updateCustomer(String name, String address, String contact){
-		if(this.verifyName(name)
-        && this.verifyAddress(address)
-        && this.verifyContact(contact)){
-            setName(name);
-			setAddress(address);
-			setContact(contact);
-        }
-		else {
-			throw new IllegalArgumentException("Invalid customer details");
-		}
-        
-    }
+        setName(name);
+		setAddress(address);
+		setContact(contact);
+       }
+ 
 	
 	public LinkedHashMap<String,Object> getData(){
 		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
@@ -119,5 +117,16 @@ public class Customer implements DataProvider{
 		data.put("address",this.getAddress());
 		data.put("contact",this.getContact());
 		return data;
+	}
+	
+	private static int toInt(Object value) {
+	    if (value instanceof Number) {
+	      return ((Number) value).intValue();
+	    }
+	    try {
+	      return Integer.parseInt(String.valueOf(value).trim());
+	    } catch (NumberFormatException ex) {
+	      throw new IllegalArgumentException("Invalid number: " + value);
+	    }
 	}
 }
