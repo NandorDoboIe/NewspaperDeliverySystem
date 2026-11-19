@@ -5,9 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import Bill.Bill;
 import Database.DAO;
 import Customer.Customer;
 import DeliveryArea.DeliveryArea;
+import DeliveryDocket.DeliveryDocket;
+import Order.Order;
 
 public class CustomerCLI {
 
@@ -25,7 +28,8 @@ public class CustomerCLI {
         this.scanner = scanner;
     }
 
-    public void showMenu(ArrayList<Customer> customers, ArrayList<DeliveryArea> deliveryAreas) {
+    public void showMenu(ArrayList<Customer> customers, ArrayList<DeliveryArea> deliveryAreas,
+            ArrayList<Order> orders, ArrayList<DeliveryDocket> deliveryDockets, ArrayList<Bill> bills) {
         while (true) {
             System.out.println("## " + ENTITY_PLURAL.toUpperCase() + " ##");
             System.out.println("1. Create " + ENTITY);
@@ -45,7 +49,7 @@ public class CustomerCLI {
                 updateCustomer(customers, deliveryAreas);
                 break;
             case 4:
-                deleteCustomer(customers);
+                deleteCustomer(customers, orders, deliveryDockets, bills);
                 break;
             case 0:
                 return;
@@ -59,6 +63,7 @@ public class CustomerCLI {
         LinkedHashMap<String, Object> input = takeUserInput(FIELDS, deliveryAreas);
         try {
             Customer newCustomer = new Customer(input); // validates
+            validateDeliveryArea(newCustomer, deliveryAreas);
             int newId = new DAO().addData(TABLE, newCustomer);
             if (newId <= 0) {
                 System.out.println("Insert failed");
@@ -90,6 +95,7 @@ public class CustomerCLI {
         input.put(ID_KEY, existing.getCustomerId());
         try {
             Customer updated = new Customer(input); // validates
+            validateDeliveryArea(updated, deliveryAreas);
             if (new DAO().editRow(TABLE, updated, existing.getCustomerId())) {
                 customers.set(customers.indexOf(existing), updated);
                 System.out.println("Updated: " + updated);
@@ -101,9 +107,27 @@ public class CustomerCLI {
         }
     }
 
-    private void deleteCustomer(ArrayList<Customer> customers) {
+    private void deleteCustomer(ArrayList<Customer> customers, ArrayList<Order> orders,
+            ArrayList<DeliveryDocket> deliveryDockets, ArrayList<Bill> bills) {
         Customer existing = selectCustomer(customers, "delete");
         if (existing == null) return;
+
+        // the database would reject the delete, so explain why first
+        int id = existing.getCustomerId();
+        long orderCount = orders.stream().filter(o -> o.getCustomerID() == id).count();
+        long docketCount = deliveryDockets.stream().filter(d -> d.getCustomerId() == id).count();
+        long billCount = bills.stream().filter(b -> b.getCustomerID() == id).count();
+        if (orderCount + docketCount + billCount > 0) {
+            System.out.println("Cannot delete " + ENTITY.toLowerCase() + " " + id + ": it has " + orderCount
+                    + " order(s), " + docketCount + " delivery docket(s) and " + billCount
+                    + " bill(s). Delete those first.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete " + ENTITY.toLowerCase() + " " + id + "? (y/n): ")) {
+            System.out.println("Delete cancelled.");
+            return;
+        }
 
         if (new DAO().deleteRow(TABLE, existing.getCustomerId())) {
             customers.remove(existing);
@@ -123,6 +147,20 @@ public class CustomerCLI {
         } catch (NumberFormatException ex) {
             return -1;
         }
+    }
+
+    private boolean confirm(String prompt) {
+        System.out.print(prompt);
+        if (!scanner.hasNextLine()) return false;
+        String answer = scanner.nextLine().trim().toLowerCase();
+        return answer.equals("y") || answer.equals("yes");
+    }
+
+    private void validateDeliveryArea(Customer customer, List<DeliveryArea> deliveryAreas) {
+        for (DeliveryArea area : deliveryAreas) {
+            if (area.getDeliveryAreaId() == customer.getDeliveryAreaId()) return;
+        }
+        throw new IllegalArgumentException("Delivery Area ID " + customer.getDeliveryAreaId() + " was not found.");
     }
 
     private LinkedHashMap<String, Object> takeUserInput(List<String> fields, ArrayList<DeliveryArea> deliveryAreas) {

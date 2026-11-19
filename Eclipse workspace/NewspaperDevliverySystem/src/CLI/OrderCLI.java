@@ -8,6 +8,7 @@ import java.util.Scanner;
 import Customer.Customer;
 import Publication.Publication;
 import Database.DAO;
+import DeliveryDocket.DeliveryDocket;
 import Order.Order;
 
 public class OrderCLI {
@@ -28,7 +29,8 @@ public class OrderCLI {
         this.scanner = scanner;
     }
 
-    public void showMenu(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
+    public void showMenu(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications,
+            ArrayList<DeliveryDocket> deliveryDockets) {
         while (true) {
             System.out.println("## " + ENTITY_PLURAL.toUpperCase() + " ##");
             System.out.println("1. Create " + ENTITY);
@@ -49,7 +51,7 @@ public class OrderCLI {
                 updateOrder(orders, customers, publications);
                 break;
             case 4:
-                deleteOrder(orders);
+                deleteOrder(orders, deliveryDockets);
                 break;
             case 0:
                 return;
@@ -63,6 +65,7 @@ public class OrderCLI {
         LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers, publications);
         try {
             Order newOrder = new Order(input); // validates
+            validateOrderRecords(newOrder, customers, publications);
             int newId = new DAO().addData(TABLE, newOrder);
             if (newId <= 0) {
                 System.out.println("Insert failed");
@@ -94,6 +97,7 @@ public class OrderCLI {
         input.put(ID_KEY, existing.getOrderID());
         try {
             Order updated = new Order(input); // validates
+            validateOrderRecords(updated, customers, publications);
             if (new DAO().editRow(TABLE, updated, existing.getOrderID())) {
                 orders.set(orders.indexOf(existing), updated);
                 System.out.println("Updated: " + updated);
@@ -105,9 +109,23 @@ public class OrderCLI {
         }
     }
 
-    private void deleteOrder(ArrayList<Order> orders) {
+    private void deleteOrder(ArrayList<Order> orders, ArrayList<DeliveryDocket> deliveryDockets) {
         Order existing = selectOrder(orders, "delete");
         if (existing == null) return;
+
+        // the database would reject the delete, so explain why first
+        int id = existing.getOrderID();
+        long docketCount = deliveryDockets.stream().filter(d -> d.getOrderId() == id).count();
+        if (docketCount > 0) {
+            System.out.println("Cannot delete " + ENTITY.toLowerCase() + " " + id + ": it has " + docketCount
+                    + " delivery docket(s). Delete those first.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete " + ENTITY.toLowerCase() + " " + id + "? (y/n): ")) {
+            System.out.println("Delete cancelled.");
+            return;
+        }
 
         if (new DAO().deleteRow(TABLE, existing.getOrderID())) {
             orders.remove(existing);
@@ -126,6 +144,22 @@ public class OrderCLI {
             return Integer.parseInt(scanner.nextLine().trim());
         } catch (NumberFormatException ex) {
             return -1;
+        }
+    }
+
+    private boolean confirm(String prompt) {
+        System.out.print(prompt);
+        if (!scanner.hasNextLine()) return false;
+        String answer = scanner.nextLine().trim().toLowerCase();
+        return answer.equals("y") || answer.equals("yes");
+    }
+
+    private void validateOrderRecords(Order order, List<Customer> customers, List<Publication> publications) {
+        if (customers.stream().noneMatch(c -> c.getCustomerId() == order.getCustomerID())) {
+            throw new IllegalArgumentException("Customer ID " + order.getCustomerID() + " was not found.");
+        }
+        if (publications.stream().noneMatch(p -> p.getPublicationID() == order.getPublicationID())) {
+            throw new IllegalArgumentException("Publication ID " + order.getPublicationID() + " was not found.");
         }
     }
 

@@ -5,11 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 import java.util.function.Function;
 
+import Bill.Bill;
 import Customer.Customer;
 import Publication.Publication;
 import DeliveryArea.DeliveryArea;
+import DeliveryDocket.DeliveryDocket;
 import Database.DAO;
 import Order.Order;
+import User.User;
 
 public class NewspaperCLI {
 
@@ -25,36 +28,45 @@ public class NewspaperCLI {
     	ArrayList<Publication> publications = new ArrayList<>();
     	ArrayList<Order> orders = new ArrayList<>();
     	ArrayList<DeliveryArea> deliveryAreas = new ArrayList<>();
-    	/**ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDockets"),Publication::new);
-    	ArrayList<Publication> bills = createObjects(dao.readTable("bills"),Publication::new);
-    	ArrayList<Publication> deliveryAreas = createObjects(dao.readTable("deliveryAreas"),Publication::new);
-    	ArrayList<Publication> users = createObjects(dao.readTable("users"),Publication::new);*/
+    	ArrayList<DeliveryDocket> deliveryDockets = new ArrayList<>();
+    	ArrayList<Bill> bills = new ArrayList<>();
+    	ArrayList<User> users = new ArrayList<>();
+    	refreshData(customers, publications, orders, deliveryAreas, deliveryDockets, bills, users);
     	
+    	User currentUser = new UserCLI(scanner).login(users);
+    	if (currentUser == null) {
+    		System.out.println("Login failed. Exiting.");
+    		return;
+    	}
     	
-    	//mainMenu(customers,publications,orders,deliveryDockets,bills,deliveryAreas,users);
-    	mainMenu(customers,publications,orders,deliveryAreas);
+    	if (currentUser.isAdmin()) {
+    		mainMenu(customers,publications,orders,deliveryAreas,deliveryDockets,bills,users,currentUser);
+    	} else {
+    		new DeliveryDocketCLI(scanner).showDeliveryPersonMenu(deliveryDockets, orders, customers, publications, deliveryAreas);
+    		System.out.println("Logged out.");
+    	}
     }
     
     private static void mainMenu(
     		ArrayList<Customer> customers,
             ArrayList<Publication> publications,
             ArrayList<Order> orders,
-            ArrayList<DeliveryArea> deliveryAreas
-            /**ArrayList<LinkedHashMap<String, Object>> deliveryDockets,
-            ArrayList<LinkedHashMap<String, Object>> bills,
-            ArrayList<LinkedHashMap<String, Object>> deliveryAreas,
-            ArrayList<LinkedHashMap<String, Object>> users*/) {
+            ArrayList<DeliveryArea> deliveryAreas,
+            ArrayList<DeliveryDocket> deliveryDockets,
+            ArrayList<Bill> bills,
+            ArrayList<User> users,
+            User currentUser) {
     	
         CustomerCLI customerCLI = new CustomerCLI(scanner);
         PublicationCLI publicationCLI = new PublicationCLI(scanner);
         OrderCLI orderCLI = new OrderCLI(scanner);
-        //DeliveryDocketCLI deliveryDocketCLI = new DeliveryDocketCLI(scanner);
-        //BillCLI billCLI = new BillCLI(scanner);
-        //DeliveryAreaCLI deliveryAreaCLI = new DeliveryAreaCLI(scanner);
-        //UserCLI userCLI = new UserCLI(scanner);
+        DeliveryAreaCLI deliveryAreaCLI = new DeliveryAreaCLI(scanner);
+        DeliveryDocketCLI deliveryDocketCLI = new DeliveryDocketCLI(scanner);
+        BillCLI billCLI = new BillCLI(scanner);
+        UserCLI userCLI = new UserCLI(scanner);
 
         while (true) {
-            refreshData(customers, publications, orders, deliveryAreas);
+            refreshData(customers, publications, orders, deliveryAreas, deliveryDockets, bills, users);
             System.out.println("\n## NEWSPAPER DELIVERY SYSTEM ##");
             System.out.println("1. Customers");
             System.out.println("2. Publications");
@@ -68,28 +80,31 @@ public class NewspaperCLI {
 
             switch (readChoice()) {
                 case 1:
-                    customerCLI.showMenu(customers, deliveryAreas);
+                    customerCLI.showMenu(customers, deliveryAreas, orders, deliveryDockets, bills);
                     break;
                 case 2:
-                    publicationCLI.showMenu(publications);
+                    publicationCLI.showMenu(publications, orders);
                     break;
                 case 3:
-                    orderCLI.showMenu(orders, customers, publications);
+                    orderCLI.showMenu(orders, customers, publications, deliveryDockets);
                     break;
                 case 4:
-                    //deliveryDocketCLI.showMenu(deliveryDocketData);
+                    deliveryDocketCLI.showMenu(deliveryDockets, orders, customers, publications, deliveryAreas);
                     break;
                 case 5:
-                    //billCLI.showMenu(BillData);
+                    billCLI.showMenu(bills, customers, orders, publications, deliveryDockets);
                     break;
                 case 6:
-                    //deliveryAreaCLI.showMenu(DeliveryAreaData);
+                    deliveryAreaCLI.showMenu(deliveryAreas, customers);
                     break;
                 case 7:
-                    //userCLI.showMenu(UserData);
+                    userCLI.showMenu(users, currentUser);
                     break;
                 case 8:
-                    //publicationCLI.showLowStockAlerts(publicationData);
+                    if (publications.stream().noneMatch(Publication::isLowStock)) {
+                        System.out.println("No publications are low on stock.");
+                    }
+                    publicationCLI.showLowStockAlerts(publications);
                     break;
                 case 0:
                     System.out.println("Where do you think your going? There's work to do!!!");
@@ -116,7 +131,10 @@ public class NewspaperCLI {
             ArrayList<Customer> customers,
             ArrayList<Publication> publications,
             ArrayList<Order> orders,
-            ArrayList<DeliveryArea> deliveryAreas) {
+            ArrayList<DeliveryArea> deliveryAreas,
+            ArrayList<DeliveryDocket> deliveryDockets,
+            ArrayList<Bill> bills,
+            ArrayList<User> users) {
         DAO dao = new DAO();
         customers.clear();
         customers.addAll(createObjects(dao.readTable("customers"), Customer::new));
@@ -126,6 +144,12 @@ public class NewspaperCLI {
         orders.addAll(createObjects(dao.readTable("orders"), Order::new));
         deliveryAreas.clear();
         deliveryAreas.addAll(createObjects(dao.readTable("deliveryAreas"), DeliveryArea::new));
+        deliveryDockets.clear();
+        deliveryDockets.addAll(createObjects(dao.readTable("deliveryDockets"), DeliveryDocket::new));
+        bills.clear();
+        bills.addAll(createObjects(dao.readTable("bills"), Bill::new));
+        users.clear();
+        users.addAll(createObjects(dao.readTable("users"), User::new));
     }
 
     private static <T> ArrayList<T> createObjects(

@@ -1,7 +1,6 @@
 package Database;
 import java.sql.Connection;
 
-import Customer.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -92,14 +91,15 @@ public class DAO {
 		checkForAllowedTables(tableName);
 		
 		
-		String sql = "DELETE from newspapersystemdatabase."+tableName+" WHERE  "+tableName.substring(0, tableName.length() - 1)+"Id="+id;
+		String sql = "DELETE from newspapersystemdatabase."+tableName+" WHERE  "+tableName.substring(0, tableName.length() - 1)+"Id = ?";
 		
 		try(Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql)){
+			stmt.setInt(1, id);
 			int rowsAffected = stmt.executeUpdate();
 			
 			if(rowsAffected==0) {
-				System.out.println("No customer with id "+id+" exits");
+				System.out.println("No " + tableName + " with id " + id + " exists");
 				return false;
 			}
 			return true;

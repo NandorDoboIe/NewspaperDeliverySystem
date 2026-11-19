@@ -1,23 +1,26 @@
 package CLI;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import Bill.Bill;
+import Customer.Customer;
 import Database.DAO;
 import DeliveryDocket.DeliveryDocket;
 import Order.Order;
 import Publication.Publication;
 
-/** CLI for storing bill refs and printing bills from successful deliveries. */
+/** CLI for saved bills and for calculating monthly bills from successful deliveries. */
 public class BillCLI {
 
     private static final String TABLE = "bills";
     private static final String ID_KEY = "billId";
-    private static final List<String> FIELDS = List.of("customerId", "orderId");
+    private static final List<String> FIELDS = List.of("customerId", "amount", "date");
 
     private final Scanner scanner;
 
@@ -27,6 +30,7 @@ public class BillCLI {
 
     /** Collections contain the records loaded by DAO. */
     public void showMenu(ArrayList<Bill> bills,
+                         ArrayList<Customer> customers,
                          ArrayList<Order> orders,
                          ArrayList<Publication> publications,
                          ArrayList<DeliveryDocket> deliveryDockets) {
@@ -36,32 +40,28 @@ public class BillCLI {
             System.out.println("2. View Saved Bills");
             System.out.println("3. Update Bill");
             System.out.println("4. Delete Bill");
-            System.out.println("5. Print Individual Order Bill");
-            System.out.println("6. Print Customer Total (All Their Orders)");
-            System.out.println("7. Print Bills For All Orders");
+            System.out.println("5. Calculate Monthly Bill For A Customer");
+            System.out.println("6. Calculate Monthly Bills For All Customers");
             System.out.println("0. Back to Main Menu");
 
             switch (readChoice()) {
                 case 1:
-                    createBill(bills, orders);
+                    createBill(bills, customers);
                     break;
                 case 2:
                     viewBills(bills);
                     break;
                 case 3:
-                    updateBill(bills, orders);
+                    updateBill(bills, customers);
                     break;
                 case 4:
                     deleteBill(bills);
                     break;
                 case 5:
-                    printIndividualBill(orders, publications, deliveryDockets);
+                    calculateCustomerBill(bills, customers, orders, publications, deliveryDockets);
                     break;
                 case 6:
-                    printCustomerBills(orders, publications, deliveryDockets);
-                    break;
-                case 7:
-                    printAllBills(orders, publications, deliveryDockets);
+                    calculateAllBills(bills, customers, orders, publications, deliveryDockets);
                     break;
                 case 0:
                     return;
@@ -71,16 +71,11 @@ public class BillCLI {
         }
     }
 
-    private void createBill(ArrayList<Bill> bills, List<Order> orders) {
-        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+    private void createBill(ArrayList<Bill> bills, List<Customer> customers) {
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers);
         try {
             Bill newBill = new Bill(input);
-            validateBillOrder(newBill, orders);
-
-            if (findBillForOrder(bills, newBill.getOrderID()) != null) {
-                System.out.println("A saved bill already exists for this order.");
-                return;
-            }
+            validateBillCustomer(newBill, customers);
 
             // This follows the current CustomerCLI contract: addData returns the new ID.
             int newId = new DAO().addData(TABLE, newBill);
@@ -107,21 +102,16 @@ public class BillCLI {
         bills.forEach(System.out::println);
     }
 
-    private void updateBill(ArrayList<Bill> bills, List<Order> orders) {
+    private void updateBill(ArrayList<Bill> bills, List<Customer> customers) {
         Bill existing = selectBill(bills, "update");
         if (existing == null) return;
 
-        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers);
         input.put(ID_KEY, existing.getBillID());
 
         try {
             Bill updated = new Bill(input);
-            validateBillOrder(updated, orders);
-            Bill duplicate = findBillForOrder(bills, updated.getOrderID());
-            if (duplicate != null && duplicate.getBillID() != existing.getBillID()) {
-                System.out.println("Another saved bill already exists for that order.");
-                return;
-            }
+            validateBillCustomer(updated, customers);
 
             if (new DAO().editRow(TABLE, updated, existing.getBillID())) {
                 bills.set(bills.indexOf(existing), updated);
@@ -138,6 +128,11 @@ public class BillCLI {
         Bill existing = selectBill(bills, "delete");
         if (existing == null) return;
 
+        if (!confirm("Are you sure you want to delete bill " + existing.getBillID() + "? (y/n): ")) {
+            System.out.println("Delete cancelled.");
+            return;
+        }
+
         if (new DAO().deleteRow(TABLE, existing.getBillID())) {
             bills.remove(existing);
             System.out.println("Bill deleted.");
@@ -146,115 +141,121 @@ public class BillCLI {
         }
     }
 
-    private void printIndividualBill(List<Order> orders,
-                                     List<Publication> publications,
-                                     List<DeliveryDocket> deliveryDockets) {
-        int orderId = readId("Enter Order ID: ");
-        if (orderId <= 0) return;
-
-        Order order = findOrder(orders, orderId);
-        if (order == null) {
-            System.out.println("No order with ID " + orderId + ". are they not buying?");
-            return;
-        }
-
-        try {
-            printAndCalculate(order, publications, deliveryDockets);
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            System.out.println("Cannot print bill: " + ex.getMessage());
-        }
-    }
-
-    private void printCustomerBills(List<Order> orders,
-                                    List<Publication> publications,
-                                    List<DeliveryDocket> deliveryDockets) {
+    private void calculateCustomerBill(ArrayList<Bill> bills, List<Customer> customers, List<Order> orders,
+                                       List<Publication> publications, List<DeliveryDocket> deliveryDockets) {
         int customerId = readId("Enter Customer ID: ");
         if (customerId <= 0) return;
 
-        long customerTotal = 0;
-        int printed = 0;
-        int skipped = 0;
-        for (Order order : orders) {
-            if (order.getCustomerID() != customerId) continue;
-
-            try {
-                customerTotal = Math.addExact(customerTotal,
-                    printAndCalculate(order, publications, deliveryDockets));
-                printed++;
-            } catch (IllegalArgumentException | IllegalStateException | ArithmeticException ex) {
-                System.out.println("Skipping Order " + order.getOrderID() + ": " + ex.getMessage());
-                skipped++;
-            }
-        }
-
-        if (printed == 0 && skipped == 0) {
-            System.out.println("No orders found for customer " + customerId + ".");
-        } else {
-            System.out.println("Customer " + customerId + " total for printed orders: €" + customerTotal);
-            if (skipped > 0) System.out.println(skipped + " order(s) could not be billed.");
-        }
-    }
-
-    private void printAllBills(List<Order> orders,
-                               List<Publication> publications,
-                               List<DeliveryDocket> deliveryDockets) {
-        if (orders.isEmpty()) {
-            System.out.println("No orders found.");
+        Customer customer = findCustomer(customers, customerId);
+        if (customer == null) {
+            System.out.println("No customer with ID " + customerId + ".");
             return;
         }
+        YearMonth month = readMonth();
+        if (month == null) return;
 
-        LinkedHashMap<Integer, Long> customerTotals = new LinkedHashMap<>();
+        try {
+            System.out.println(Bill.getPrintableBill(customer, month, deliveryDockets, orders, publications));
+            int amount = Bill.calculateTotal(customerId, month, deliveryDockets, orders, publications);
+            if (confirm("Save this bill? (y/n): ")) {
+                saveMonthlyBill(bills, customerId, amount, month);
+            }
+        } catch (IllegalArgumentException | IllegalStateException | ArithmeticException ex) {
+            System.out.println("Cannot calculate bill: " + ex.getMessage());
+        }
+    }
+
+    private void calculateAllBills(ArrayList<Bill> bills, List<Customer> customers, List<Order> orders,
+                                   List<Publication> publications, List<DeliveryDocket> deliveryDockets) {
+        if (customers.isEmpty()) {
+            System.out.println("No customers found.");
+            return;
+        }
+        YearMonth month = readMonth();
+        if (month == null) return;
+
+        LinkedHashMap<Integer, Integer> amounts = new LinkedHashMap<>();
         int skipped = 0;
-        for (Order order : orders) {
+        for (Customer customer : customers) {
             try {
-                long total = printAndCalculate(order, publications, deliveryDockets);
-                customerTotals.put(order.getCustomerID(),
-                    Math.addExact(customerTotals.getOrDefault(order.getCustomerID(), 0L), total));
+                int amount = Bill.calculateTotal(customer.getCustomerId(), month, deliveryDockets, orders, publications);
+                if (amount == 0) continue; // nothing delivered, nothing to bill
+                System.out.println(Bill.getPrintableBill(customer, month, deliveryDockets, orders, publications));
+                amounts.put(customer.getCustomerId(), amount);
             } catch (IllegalArgumentException | IllegalStateException | ArithmeticException ex) {
-                System.out.println("Skipping Order " + order.getOrderID() + ": " + ex.getMessage());
+                System.out.println("Skipping Customer " + customer.getCustomerId() + ": " + ex.getMessage());
                 skipped++;
             }
         }
 
+        if (amounts.isEmpty()) {
+            System.out.println("No successful deliveries in " + month + ".");
+            return;
+        }
         long grandTotal = 0;
-        System.out.println("\n## TOTALS BY CUSTOMER ##");
-        for (Map.Entry<Integer, Long> entry : customerTotals.entrySet()) {
-            System.out.println("Customer " + entry.getKey() + ": €" + entry.getValue());
-            grandTotal = Math.addExact(grandTotal, entry.getValue());
+        System.out.println("\n## TOTALS BY CUSTOMER " + month + " ##");
+        for (Integer customerId : amounts.keySet()) {
+            System.out.println("Customer " + customerId + ": \u20AC" + amounts.get(customerId));
+            grandTotal += amounts.get(customerId);
         }
-        System.out.println("Grand total for printed orders: €" + grandTotal);
-        if (skipped > 0) System.out.println(skipped + " order(s) could not be billed.");
-    }
+        System.out.println("Grand total: \u20AC" + grandTotal);
+        if (skipped > 0) System.out.println(skipped + " customer(s) could not be billed.");
 
-    private long printAndCalculate(Order order,
-                                   List<Publication> publications,
-                                   List<DeliveryDocket> deliveryDockets) {
-        Publication publication = findPublication(publications, order.getPublicationID());
-        if (publication == null) {
-            throw new IllegalArgumentException(
-                "Publication " + order.getPublicationID() + " was not found.");
-        }
-        Bill bill = new Bill(0, order.getCustomerID(), order.getOrderID());
-        long total = bill.calculateTotal(order, publication, deliveryDockets);
-        bill.printBill(order, publication, deliveryDockets);
-        return total;
-    }
-
-    private void validateBillOrder(Bill bill, List<Order> orders) {
-        Order order = findOrder(orders, bill.getOrderID());
-        if (order == null) {
-            throw new IllegalArgumentException("Order ID " + bill.getOrderID() + " was not found.");
-        }
-        if (order.getCustomerID() != bill.getCustomerID()) {
-            throw new IllegalArgumentException("Customer ID does not match the selected order.");
+        if (confirm("Save all " + amounts.size() + " bills? (y/n): ")) {
+            for (Integer customerId : amounts.keySet()) {
+                saveMonthlyBill(bills, customerId, amounts.get(customerId), month);
+            }
         }
     }
 
-    private LinkedHashMap<String, Object> takeUserInput(List<String> fields) {
+    /** Updates the customer's saved bill for that month if there is one, otherwise creates a new bill. */
+    private void saveMonthlyBill(ArrayList<Bill> bills, int customerId, int amount, YearMonth month) {
+        try {
+            Bill existing = findBillForMonth(bills, customerId, month);
+            Bill bill = new Bill(existing == null ? 0 : existing.getBillID(), customerId, amount,
+                    LocalDate.now().toString());
+
+            if (existing != null) {
+                if (new DAO().editRow(TABLE, bill, existing.getBillID())) {
+                    bills.set(bills.indexOf(existing), bill);
+                    System.out.println("Updated existing bill for " + month + ": " + bill);
+                } else {
+                    System.out.println("Bill update failed.");
+                }
+                return;
+            }
+
+            int newId = new DAO().addData(TABLE, bill);
+            if (newId <= 0) {
+                System.out.println("Bill insert failed.");
+                return;
+            }
+            Bill saved = new Bill(newId, customerId, amount, bill.getDate());
+            bills.add(saved);
+            System.out.println("Bill saved: " + saved);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void validateBillCustomer(Bill bill, List<Customer> customers) {
+        if (findCustomer(customers, bill.getCustomerID()) == null) {
+            throw new IllegalArgumentException("Customer ID " + bill.getCustomerID() + " was not found.");
+        }
+    }
+
+    private LinkedHashMap<String, Object> takeUserInput(List<String> fields, List<Customer> customers) {
         LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
         userInput.put(ID_KEY, 0);
         for (String field : fields) {
-            System.out.print("Please enter " + field + ": ");
+            if (field.equals("customerId")) {
+                customers.forEach(System.out::println);
+            }
+            if (field.equals("date")) {
+                System.out.print("Please enter " + field + " (yyyy-MM-dd): ");
+            } else {
+                System.out.print("Please enter " + field + ": ");
+            }
             userInput.put(field, scanner.nextLine().trim());
         }
         return userInput;
@@ -274,25 +275,39 @@ public class BillCLI {
         return null;
     }
 
-    private static Bill findBillForOrder(List<Bill> bills, int orderId) {
+    private static Bill findBillForMonth(List<Bill> bills, int customerId, YearMonth month) {
         for (Bill bill : bills) {
-            if (bill.getOrderID() == orderId) return bill;
+            if (bill.getCustomerID() == customerId && YearMonth.from(bill.getLocalDate()).equals(month)) return bill;
         }
         return null;
     }
 
-    private static Order findOrder(List<Order> orders, int orderId) {
-        for (Order order : orders) {
-            if (order.getOrderID() == orderId) return order;
+    private static Customer findCustomer(List<Customer> customers, int customerId) {
+        for (Customer customer : customers) {
+            if (customer.getCustomerId() == customerId) return customer;
         }
         return null;
     }
 
-    private static Publication findPublication(List<Publication> publications, int publicationId) {
-        for (Publication publication : publications) {
-            if (publication.getPublicationID() == publicationId) return publication;
+    /** Returns the entered month, this month for an empty line, or null (after printing why). */
+    private YearMonth readMonth() {
+        System.out.print("Month to bill (yyyy-MM, Enter for this month): ");
+        if (!scanner.hasNextLine()) return null;
+        String text = scanner.nextLine().trim();
+        if (text.isEmpty()) return YearMonth.now();
+        try {
+            return YearMonth.parse(text);
+        } catch (DateTimeParseException ex) {
+            System.out.println("Invalid month. Use yyyy-MM.");
+            return null;
         }
-        return null;
+    }
+
+    private boolean confirm(String prompt) {
+        System.out.print(prompt);
+        if (!scanner.hasNextLine()) return false;
+        String answer = scanner.nextLine().trim().toLowerCase();
+        return answer.equals("y") || answer.equals("yes");
     }
 
     private int readId(String prompt) {

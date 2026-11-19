@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Database.DAO;
+import Order.Order;
 import Publication.Publication;
 
 public class PublicationCLI {
@@ -26,7 +27,7 @@ public class PublicationCLI {
         this.scanner = scanner;
     }
 
-    public void showMenu(ArrayList<Publication> publications) {
+    public void showMenu(ArrayList<Publication> publications, ArrayList<Order> orders) {
         while (true) {
             System.out.println("## " + ENTITY_PLURAL.toUpperCase() + " ##");
             System.out.println("1. Create " + ENTITY);
@@ -48,7 +49,7 @@ public class PublicationCLI {
                 updatePublication(publications);
                 break;
             case 4:
-                deletePublication(publications);
+                deletePublication(publications, orders);
                 break;
             case 5:
                 restockPublication(publications);
@@ -107,9 +108,23 @@ public class PublicationCLI {
         }
     }
 
-    private void deletePublication(ArrayList<Publication> publications) {
+    private void deletePublication(ArrayList<Publication> publications, ArrayList<Order> orders) {
         Publication existing = selectPublication(publications, "delete");
         if (existing == null) return;
+
+        // the database would reject the delete, so explain why first
+        int id = existing.getPublicationID();
+        long orderCount = orders.stream().filter(o -> o.getPublicationID() == id).count();
+        if (orderCount > 0) {
+            System.out.println("Cannot delete " + ENTITY.toLowerCase() + " " + id + ": it has " + orderCount
+                    + " order(s). Delete those first.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete " + ENTITY.toLowerCase() + " " + id + "? (y/n): ")) {
+            System.out.println("Delete cancelled.");
+            return;
+        }
 
         if (new DAO().deleteRow(TABLE, existing.getPublicationID())) {
             publications.remove(existing);
@@ -125,8 +140,13 @@ public class PublicationCLI {
 
         LinkedHashMap<String, Object> input = takeUserInput(List.of("stock"));
         try {
-            int stock = Integer.parseInt(input.get("stock").toString());
-            existing.updateDetails(existing.getName(), existing.getType(), existing.getCost(), stock);
+            int quantity = Integer.parseInt(input.get("stock").toString());
+            existing.addStock(quantity);
+            if (new DAO().editRow(TABLE, existing, existing.getPublicationID())) {
+                System.out.println("Restocked: " + existing);
+            } else {
+                System.out.println("Restock failed");
+            }
         } catch (IllegalArgumentException ex) { // also covers NumberFormatException
             System.out.println("Invalid stock: " + ex.getMessage());
         }
@@ -149,6 +169,13 @@ public class PublicationCLI {
         } catch (NumberFormatException ex) {
             return -1;
         }
+    }
+
+    private boolean confirm(String prompt) {
+        System.out.print(prompt);
+        if (!scanner.hasNextLine()) return false;
+        String answer = scanner.nextLine().trim().toLowerCase();
+        return answer.equals("y") || answer.equals("yes");
     }
 
     private LinkedHashMap<String, Object> takeUserInput(List<String> fields) {
