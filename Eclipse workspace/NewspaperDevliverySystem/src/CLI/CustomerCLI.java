@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import Database.DAO;
 import Customer.Customer;
+import DeliveryArea.DeliveryArea;
 
 public class CustomerCLI {
 
@@ -15,7 +16,7 @@ public class CustomerCLI {
     private static final String ID_KEY = "customerId";
     private static final String ENTITY = "Customer";
     private static final String ENTITY_PLURAL = "Customers";
-    private static final List<String> FIELDS = List.of("name", "address", "contact");
+    private static final List<String> FIELDS = List.of("deliveryAreaId", "name", "address", "contact");
     // ----------------------------------------------------------------------------
 
     private final Scanner scanner;
@@ -24,7 +25,7 @@ public class CustomerCLI {
         this.scanner = scanner;
     }
 
-    public void showMenu(ArrayList<Customer> customers) {
+    public void showMenu(ArrayList<Customer> customers, ArrayList<DeliveryArea> deliveryAreas) {
         while (true) {
             System.out.println("## " + ENTITY_PLURAL.toUpperCase() + " ##");
             System.out.println("1. Create " + ENTITY);
@@ -35,13 +36,13 @@ public class CustomerCLI {
 
             switch (readChoice()) {
             case 1:
-                createCustomer(customers);
+                createCustomer(customers, deliveryAreas);
                 break;
             case 2:
                 viewCustomers(customers);
                 break;
             case 3:
-                updateCustomer(customers);
+                updateCustomer(customers, deliveryAreas);
                 break;
             case 4:
                 deleteCustomer(customers);
@@ -54,8 +55,8 @@ public class CustomerCLI {
         }
     }
 
-    private void createCustomer(ArrayList<Customer> customers) {
-        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+    private void createCustomer(ArrayList<Customer> customers, ArrayList<DeliveryArea> deliveryAreas) {
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS, deliveryAreas);
         try {
             Customer newCustomer = new Customer(input); // validates
             int newId = new DAO().addData(TABLE, newCustomer);
@@ -81,11 +82,11 @@ public class CustomerCLI {
         customers.forEach(System.out::println);
     }
 
-    private void updateCustomer(ArrayList<Customer> customers) {
+    private void updateCustomer(ArrayList<Customer> customers, ArrayList<DeliveryArea> deliveryAreas) {
         Customer existing = selectCustomer(customers, "update");
         if (existing == null) return;
 
-        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS, deliveryAreas);
         input.put(ID_KEY, existing.getCustomerId());
         try {
             Customer updated = new Customer(input); // validates
@@ -124,10 +125,16 @@ public class CustomerCLI {
         }
     }
 
-    private LinkedHashMap<String, Object> takeUserInput(List<String> fields) {
+    private LinkedHashMap<String, Object> takeUserInput(List<String> fields, ArrayList<DeliveryArea> deliveryAreas) {
         LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
         userInput.put(ID_KEY, 0);
         for (String field : fields) {
+            if (field.equals("deliveryAreaId")) {
+                if (deliveryAreas.isEmpty()) {
+                    System.out.println("Delivery Areas is empty");
+                }
+                deliveryAreas.forEach(System.out::println);
+            }
             System.out.print("Please enter " + field + ": ");
             userInput.put(field, scanner.nextLine().trim());
         }

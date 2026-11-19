@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import Customer.Customer;
 import Publication.Publication;
+import DeliveryArea.DeliveryArea;
 import Database.DAO;
 import Order.Order;
 
@@ -23,9 +24,10 @@ public class NewspaperCLI {
     	DAO dao = new DAO();
     	
     	
-    	ArrayList<Customer> customers = createObjects(dao.readTable("customers"),Customer::new);
-    	ArrayList<Publication> publications = createObjects(dao.readTable("publications"),Publication::new);
-    	ArrayList<Order> orders = createObjects(dao.readTable("orders"),Order::new);
+    	ArrayList<Customer> customers = new ArrayList<>();
+    	ArrayList<Publication> publications = new ArrayList<>();
+    	ArrayList<Order> orders = new ArrayList<>();
+    	ArrayList<DeliveryArea> deliveryAreas = new ArrayList<>();
     	/**ArrayList<Publication> deliveryDockets = createObjects(dao.readTable("deliveryDockets"),Publication::new);
     	ArrayList<Publication> bills = createObjects(dao.readTable("bills"),Publication::new);
     	ArrayList<Publication> deliveryAreas = createObjects(dao.readTable("deliveryAreas"),Publication::new);
@@ -33,13 +35,14 @@ public class NewspaperCLI {
     	
     	
     	//mainMenu(customers,publications,orders,deliveryDockets,bills,deliveryAreas,users);
-    	mainMenu(customers,publications,orders);
+    	mainMenu(customers,publications,orders,deliveryAreas);
     }
     
     private static void mainMenu(
     		ArrayList<Customer> customers,
             ArrayList<Publication> publications,
-            ArrayList<Order> orders
+            ArrayList<Order> orders,
+            ArrayList<DeliveryArea> deliveryAreas
             /**ArrayList<LinkedHashMap<String, Object>> deliveryDockets,
             ArrayList<LinkedHashMap<String, Object>> bills,
             ArrayList<LinkedHashMap<String, Object>> deliveryAreas,
@@ -54,6 +57,7 @@ public class NewspaperCLI {
         //UserCLI userCLI = new UserCLI(scanner);
 
         while (true) {
+            refreshData(customers, publications, orders, deliveryAreas);
             System.out.println("\n## NEWSPAPER DELIVERY SYSTEM ##");
             System.out.println("1. Customers");
             System.out.println("2. Publications");
@@ -67,13 +71,13 @@ public class NewspaperCLI {
 
             switch (readChoice()) {
                 case 1:
-                    customerCLI.showMenu(customers);
+                    customerCLI.showMenu(customers, deliveryAreas);
                     break;
                 case 2:
                     publicationCLI.showMenu(publications);
                     break;
                 case 3:
-                    orderCLI.showMenu(orders);
+                    orderCLI.showMenu(orders, customers, publications);
                     break;
                 case 4:
                     //deliveryDocketCLI.showMenu(deliveryDocketData);
@@ -111,6 +115,22 @@ public class NewspaperCLI {
         }
     }
     
+    private static void refreshData(
+            ArrayList<Customer> customers,
+            ArrayList<Publication> publications,
+            ArrayList<Order> orders,
+            ArrayList<DeliveryArea> deliveryAreas) {
+        DAO dao = new DAO();
+        customers.clear();
+        customers.addAll(createObjects(dao.readTable("customers"), Customer::new));
+        publications.clear();
+        publications.addAll(createObjects(dao.readTable("publications"), Publication::new));
+        orders.clear();
+        orders.addAll(createObjects(dao.readTable("orders"), Order::new));
+        deliveryAreas.clear();
+        deliveryAreas.addAll(createObjects(dao.readTable("deliveryAreas"), DeliveryArea::new));
+    }
+
     private static <T> ArrayList<T> createObjects(
             ArrayList<LinkedHashMap<String, Object>> rows,
             Function<LinkedHashMap<String, Object>, T> factory) {

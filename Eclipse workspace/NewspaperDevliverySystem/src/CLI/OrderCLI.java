@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import Customer.Customer;
+import Publication.Publication;
 import Database.DAO;
 import Order.Order;
 
@@ -26,7 +28,7 @@ public class OrderCLI {
         this.scanner = scanner;
     }
 
-    public void showMenu(ArrayList<Order> orders) {
+    public void showMenu(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
         while (true) {
             System.out.println("## " + ENTITY_PLURAL.toUpperCase() + " ##");
             System.out.println("1. Create " + ENTITY);
@@ -39,13 +41,13 @@ public class OrderCLI {
 
             switch (readChoice()) {
             case 1:
-                createPublication(orders);
+                createPublication(orders, customers, publications);
                 break;
             case 2:
                 viewPublications(orders);
                 break;
             case 3:
-                updatePublication(orders);
+                updatePublication(orders, customers, publications);
                 break;
             case 4:
                 deletePublication(orders);
@@ -58,8 +60,8 @@ public class OrderCLI {
         }
     }
 
-    private void createPublication(ArrayList<Order> orders) {
-        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+    private void createPublication(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers, publications);
         try {
             Order newPublication = new Order(input); // validates
             int newId = new DAO().addData(TABLE, newPublication);
@@ -85,11 +87,11 @@ public class OrderCLI {
         orders.forEach(System.out::println);
     }
 
-    private void updatePublication(ArrayList<Order> orders) {
+    private void updatePublication(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
         Order existing = selectPublication(orders, "update");
         if (existing == null) return;
 
-        LinkedHashMap<String, Object> input = takeUserInput(FIELDS);
+        LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers, publications);
         input.put(ID_KEY, existing.getPublicationID());
         try {
             Order updated = new Order(input); // validates
@@ -128,10 +130,16 @@ public class OrderCLI {
         }
     }
 
-    private LinkedHashMap<String, Object> takeUserInput(List<String> fields) {
+    private LinkedHashMap<String, Object> takeUserInput(List<String> fields, ArrayList<Customer> customers,
+            ArrayList<Publication> publications) {
         LinkedHashMap<String, Object> userInput = new LinkedHashMap<>();
         userInput.put(ID_KEY, 0);
         for (String field : fields) {
+            if (field.equals("customerId")) {
+                customers.forEach(System.out::println);
+            } else if (field.equals("publicationId")) {
+                publications.forEach(System.out::println);
+            }
             System.out.print("Please enter " + field + ": ");
             userInput.put(field, scanner.nextLine().trim());
         }

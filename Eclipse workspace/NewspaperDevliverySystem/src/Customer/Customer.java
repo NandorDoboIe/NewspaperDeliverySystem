@@ -15,7 +15,7 @@ public class Customer implements DataProvider{
 	
 	public Customer(LinkedHashMap<String, Object> row) {
 		 this(toInt(row.get("customerId")),
-				 toInt(row.get("customerId")),
+				 toInt(row.get("deliveryAreaId")),
 		         (String) row.get("name"),
 		         (String) row.get("address"),
 		         (String) row.get("contact"));

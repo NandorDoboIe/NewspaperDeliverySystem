@@ -15,7 +15,7 @@ import java.sql.Statement;
 
 public class DAO {
 	
-	private static final Set<String> ALLOWED_TABLES = Set.of("customers","publications","orders","deliveryDocket","deliveryArea","user","bill");
+	private static final Set<String> ALLOWED_TABLES = Set.of("customers","publications","orders","deliveryDocket","deliveryAreas","user","bill");
 	
 
 	  public int addData(String tableName, DataProvider entity) {
