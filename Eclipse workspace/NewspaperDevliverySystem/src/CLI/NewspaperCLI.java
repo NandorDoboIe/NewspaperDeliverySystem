@@ -21,9 +21,6 @@ public class NewspaperCLI {
     }
 
     private static void startUp() {
-    	DAO dao = new DAO();
-    	
-    	
     	ArrayList<Customer> customers = new ArrayList<>();
     	ArrayList<Publication> publications = new ArrayList<>();
     	ArrayList<Order> orders = new ArrayList<>();

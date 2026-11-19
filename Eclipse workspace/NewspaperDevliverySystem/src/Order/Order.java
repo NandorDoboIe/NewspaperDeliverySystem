@@ -187,8 +187,8 @@ public class Order implements DataProvider {
         if (row == null) {
             throw new IllegalArgumentException("Order data is required.");
         }
-        return row.containsKey("ordersId")
-                ? toInt(row.get("ordersId"), "ordersId") : 0;
+        return row.containsKey("orderId")
+                ? toInt(row.get("orderId"), "orderId") : 0;
     }
 
     private static int toInt(Object value, String field) {

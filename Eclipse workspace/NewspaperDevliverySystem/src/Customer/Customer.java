@@ -136,7 +136,6 @@ public class Customer implements DataProvider{
 	}
 	
 	private static int toInt(Object value) {
-		System.out.println(value);
 	    if (value instanceof Number) {
 	      return ((Number) value).intValue();
 	    }

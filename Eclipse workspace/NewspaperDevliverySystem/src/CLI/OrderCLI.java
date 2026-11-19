@@ -17,7 +17,7 @@ public class OrderCLI {
     private static final String ID_KEY = "orderId";
     private static final String ENTITY = "Order";
     private static final String ENTITY_PLURAL = "Orders";
-    private static final List<String> FIELDS = List.of("customerId", "publicationId", "deliveryPattern");
+    private static final List<String> FIELDS = List.of("customerId", "publicationId", "pattern");
     // ----------------------------------------------------------------------------
 
     private static final int LOW_STOCK_THRESHOLD = 5;
@@ -35,7 +35,6 @@ public class OrderCLI {
             System.out.println("2. View " + ENTITY_PLURAL);
             System.out.println("3. Update " + ENTITY);
             System.out.println("4. Delete " + ENTITY);
-            System.out.println("5. Restock " + ENTITY);
             System.out.println("0. Back to Main Menu");
             
 
@@ -92,10 +91,10 @@ public class OrderCLI {
         if (existing == null) return;
 
         LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers, publications);
-        input.put(ID_KEY, existing.getPublicationID());
+        input.put(ID_KEY, existing.getOrderID());
         try {
             Order updated = new Order(input); // validates
-            if (new DAO().editRow(TABLE, updated, existing.getPublicationID())) {
+            if (new DAO().editRow(TABLE, updated, existing.getOrderID())) {
                 orders.set(orders.indexOf(existing), updated);
                 System.out.println("Updated: " + updated);
             } else {
@@ -110,7 +109,7 @@ public class OrderCLI {
         Order existing = selectPublication(orders, "delete");
         if (existing == null) return;
 
-        if (new DAO().deleteRow(TABLE, existing.getPublicationID())) {
+        if (new DAO().deleteRow(TABLE, existing.getOrderID())) {
             orders.remove(existing);
             System.out.println("Deleted.");
         } else {
@@ -158,7 +157,7 @@ public class OrderCLI {
             return null;
         }
         for (Order p : orders) {
-            if (p.getPublicationID() == id) {
+            if (p.getOrderID() == id) {
                 return p;
             }
         }
