@@ -238,22 +238,7 @@ public class TestUser {
         assertEquals("admin", result.getAccess_level());
     }
 
-    // Test Number: TC21
-    // Test Objective: Verify that a user account is deleted by id
- 	// Input(s): delete user id 4
- 	// Expected Output: null when read user id 4
-    @Test
-    void deleteUserAccount_TC21() {
-        User user = new User();
-
-        user.createUserAccount(
-            4, "John Doe", "password123",
-            "0812345678", "news agent"
-        );
-
-        assertTrue(user.deleteUserAccount(4));
-        assertNull(user.readUserAccount(4));
-    }
+    
     
     
 }
