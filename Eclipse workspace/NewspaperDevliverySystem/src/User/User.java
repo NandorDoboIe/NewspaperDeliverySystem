@@ -1,17 +1,19 @@
 package User;
 
 import java.util.ArrayList;
-import DataProvider;
-public class User {
+import java.util.LinkedHashMap;
+import java.util.Map;
+import Database.DataProvider;
 
-    private int id;
+public class User implements DataProvider{
+	private static final Map<Integer, User> users = new LinkedHashMap<>();
+    
+	private int id;
     private String name;
     private String password;
     private String contact;
     private String access_level;
 
-    // Store all user accounts
-    private static ArrayList<User> users = new ArrayList<>();
 
     // No-argument constructor for JUnit tests
     public User() {
@@ -26,6 +28,8 @@ public class User {
         this.contact = contact;
         this.access_level = access_level;
     }
+    
+    
 
     // Getters
     public int getId() {
@@ -128,19 +132,12 @@ public class User {
             return false;
         }
 
-        users.add(newUser);
         return true;
     }
 
     // READ: Find a user by ID
     public User readUserAccount(int id) {
-        for (User user : users) {
-            if (user.getId() == id) {
-                return user;
-            }
-        }
-
-        return null;
+    	return users.get(id);
     }
 
     // UPDATE: Modify an existing user
@@ -169,27 +166,25 @@ public class User {
         return true;
     }
 
-    d
-
-    // Display all user accounts
     public void listUserAccounts() {
         if (users.isEmpty()) {
             System.out.println("No users found.");
             return;
         }
 
-        for (User user : users) {
-            System.out.println(
-                "ID: " + user.id
-                + ", Name: " + user.name
-                + ", Contact: " + user.contact
-                + ", Access Level: " + user.access_level
-            );
+        for (User user : users.values()) {
+            System.out.println("ID: " + user.getId()
+                    + ", Name: " + user.getName()
+                    + ", Contact: " + user.getContact()
+                    + ", Access Level: " + user.getAccess_level());
         }
     }
 
-    // Clear stored users between unit tests
-    static void resetUsers() {
-        users.clear();
-    }
+    public LinkedHashMap<String,Object> getData(){
+		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
+		data.put("name",this.getName());
+		data.put("contact",this.getContact());
+		data.put("access_level",this.getAccess_level());
+		return data;
+	}
 }
