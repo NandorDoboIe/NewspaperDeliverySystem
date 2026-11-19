@@ -15,7 +15,7 @@ import Publication.Publication;
 /** CLI for storing bill refs and printing bills from successful deliveries. */
 public class BillCLI {
 
-    private static final String TABLE = "bill";
+    private static final String TABLE = "bills";
     private static final String ID_KEY = "billId";
     private static final List<String> FIELDS = List.of("customerId", "orderId");
 

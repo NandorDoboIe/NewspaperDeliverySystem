@@ -341,7 +341,7 @@ public class PublicationTest {
 
 		LinkedHashMap<String, Object> row = new LinkedHashMap<>();
 
-		row.put("publicationsId", 1);
+		row.put("publicationId", 1);
 		row.put("name", "Irish Independent");
 		row.put("type", "Newspaper");
 		row.put("cost", 3);

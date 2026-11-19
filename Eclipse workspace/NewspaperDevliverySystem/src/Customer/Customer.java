@@ -119,7 +119,8 @@ public class Customer implements DataProvider{
         return false;
     }
 
-	public void updateCustomer(String name, String address, String contact){
+	public void updateCustomer(int deliveryAreaId, String name, String address, String contact){
+        setDeliveryAreaId(deliveryAreaId);
         setName(name);
 		setAddress(address);
 		setContact(contact);

@@ -22,7 +22,7 @@ public class Publication implements DataProvider {
 	}
 
 	public Publication(LinkedHashMap<String, Object> row) {
-	    this(toInt(row.get("publicationsId")),
+	    this(toInt(row.get("publicationId")),
 	         (String) row.get("name"),
 	         (String) row.get("type"),
 	         toInt(row.get("cost")),

@@ -40,16 +40,16 @@ public class OrderCLI {
 
             switch (readChoice()) {
             case 1:
-                createPublication(orders, customers, publications);
+                createOrder(orders, customers, publications);
                 break;
             case 2:
-                viewPublications(orders);
+                viewOrders(orders);
                 break;
             case 3:
-                updatePublication(orders, customers, publications);
+                updateOrder(orders, customers, publications);
                 break;
             case 4:
-                deletePublication(orders);
+                deleteOrder(orders);
                 break;
             case 0:
                 return;
@@ -59,11 +59,11 @@ public class OrderCLI {
         }
     }
 
-    private void createPublication(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
+    private void createOrder(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
         LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers, publications);
         try {
-            Order newPublication = new Order(input); // validates
-            int newId = new DAO().addData(TABLE, newPublication);
+            Order newOrder = new Order(input); // validates
+            int newId = new DAO().addData(TABLE, newOrder);
             if (newId <= 0) {
                 System.out.println("Insert failed");
                 return;
@@ -78,7 +78,7 @@ public class OrderCLI {
         }
     }
 
-    private void viewPublications(ArrayList<Order> orders) {
+    private void viewOrders(ArrayList<Order> orders) {
         if (orders.isEmpty()) {
             System.out.println(ENTITY_PLURAL + " is empty");
             return;
@@ -86,8 +86,8 @@ public class OrderCLI {
         orders.forEach(System.out::println);
     }
 
-    private void updatePublication(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
-        Order existing = selectPublication(orders, "update");
+    private void updateOrder(ArrayList<Order> orders, ArrayList<Customer> customers, ArrayList<Publication> publications) {
+        Order existing = selectOrder(orders, "update");
         if (existing == null) return;
 
         LinkedHashMap<String, Object> input = takeUserInput(FIELDS, customers, publications);
@@ -105,8 +105,8 @@ public class OrderCLI {
         }
     }
 
-    private void deletePublication(ArrayList<Order> orders) {
-        Order existing = selectPublication(orders, "delete");
+    private void deleteOrder(ArrayList<Order> orders) {
+        Order existing = selectOrder(orders, "delete");
         if (existing == null) return;
 
         if (new DAO().deleteRow(TABLE, existing.getOrderID())) {
@@ -146,8 +146,8 @@ public class OrderCLI {
     }
 
     /** Lists items, asks for an id, and returns the match, or null (after printing why). */
-    private Order selectPublication(ArrayList<Order> orders, String action) {
-        viewPublications(orders);
+    private Order selectOrder(ArrayList<Order> orders, String action) {
+        viewOrders(orders);
         System.out.print("Id of the " + ENTITY.toLowerCase() + " to " + action + ": ");
         int id;
         try {
@@ -156,9 +156,9 @@ public class OrderCLI {
             System.out.println("Invalid id.");
             return null;
         }
-        for (Order p : orders) {
-            if (p.getOrderID() == id) {
-                return p;
+        for (Order o : orders) {
+            if (o.getOrderID() == id) {
+                return o;
             }
         }
         System.out.println("No " + ENTITY.toLowerCase() + " with id " + id);
