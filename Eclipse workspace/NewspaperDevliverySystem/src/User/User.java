@@ -1,7 +1,7 @@
 package User;
 
 import java.util.ArrayList;
-
+import DataProvider;
 public class User {
 
     private int id;
@@ -169,17 +169,7 @@ public class User {
         return true;
     }
 
-    // DELETE: Remove a user by ID
-    public boolean deleteUserAccount(int id) {
-        User user = readUserAccount(id);
-
-        if (user == null) {
-            return false;
-        }
-
-        users.remove(user);
-        return true;
-    }
+    d
 
     // Display all user accounts
     public void listUserAccounts() {
