@@ -37,7 +37,7 @@ class TestDelArea {
 		}
 
 		// Test Number: TC04
-		// Test Objective: Verify the minimum boundary for a delArea's name
+		// Test Objective: Verify the minimum boundary for a location
 		// Input(s): "J"
 		// Expected Output: true
 		@Test
