@@ -2,8 +2,11 @@ package DelArea;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import Database.DataProvider;
 
-public class DelArea {
+public class DelArea implements DataProvider{
 
     private int id;
     private String location;
@@ -126,8 +129,10 @@ public class DelArea {
         }
     }
 
-    // Reset the list between tests
-    static void resetAreas() {
-        areas.clear();
-    }
+    public LinkedHashMap<String,Object> getData(){
+		LinkedHashMap<String,Object> data = new LinkedHashMap<>();
+		data.put("id",this.getId());
+		data.put("location",this.getLocation());
+		return data;
+	}
 }
