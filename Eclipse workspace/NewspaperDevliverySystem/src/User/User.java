@@ -165,6 +165,10 @@ public class User implements DataProvider{
 
         return true;
     }
+    
+    public boolean deleteUserAccount() {
+    	
+    }
 
     public void listUserAccounts() {
         if (users.isEmpty()) {
