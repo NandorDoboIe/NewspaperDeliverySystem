@@ -7,43 +7,43 @@ import org.junit.jupiter.api.Test;
 class TestDelArea {
 
 	// Test Number: TC01
-		// Test Objective: Verify the minimum boundary for user ID
+		// Test Objective: Verify the minimum boundary for delArea ID
 		// Input(s): 1
 		// Expected Output: true
 		@Test
 		void verifyIdMinBoundary_TC01() {
-		    User user = new User();
-		    assertTrue(user.verifyId(1));
+		    DelArea area = new User();
+		    assertTrue(area.verifyId(1));
 		}
 
 		// Test Number: TC02
-		// Test Objective: Verify a valid user ID
+		// Test Objective: Verify a valid delArea ID
 		// Input(s): 24
 		// Expected Output: true
 		@Test
 		void verifyValidId_TC02() {
-		    DelArea user = new DelArea();
-		    assertTrue(user.verifyId(24));
+		    DelArea area = new DelArea();
+		    assertTrue(area.verifyId(24));
 		}
 
 		// Test Number: TC03
-		// Test Objective: Verify that a negative user ID is invalid
+		// Test Objective: Verify that a negative delArea ID is invalid
 		// Input(s): -21
 		// Expected Output: false
 		@Test
 		void invalidId_TC03() {
-			DelArea user = new DelArea();
-		    assertFalse(user.verifyId(-21));
+			DelArea area = new DelArea();
+		    assertFalse(area.verifyId(-21));
 		}
 
 		// Test Number: TC04
-		// Test Objective: Verify the minimum boundary for a user's name
+		// Test Objective: Verify the minimum boundary for a delArea's name
 		// Input(s): "J"
 		// Expected Output: true
 		@Test
 		void verifyNameMinBoundary_TC04() {
-			DelArea user = new DelArea();
-		    assertTrue(user.verifyLocation("A"));
+			DelArea area = new DelArea();
+		    assertTrue(area.verifyLocation("A"));
 		}
 
 		// Test Number: TC05
@@ -52,8 +52,8 @@ class TestDelArea {
 		// Expected Output: true
 		@Test
 		void verifyValidName_TC05() {
-			DelArea user = new DelArea();
-		    assertTrue(user.verifyLocation("Athlone"));
+			DelArea area = new DelArea();
+		    assertTrue(area.verifyLocation("Athlone"));
 		}
 
 		// Test Number: TC06
@@ -62,8 +62,8 @@ class TestDelArea {
 		// Expected Output: false
 		@Test
 		void invalidName_TC06() {
-			DelArea user = new DelArea();
-		    assertFalse(user.verifyLocation(" "));
+			DelArea area = new DelArea();
+		    assertFalse(area.verifyLocation(" "));
 		}
 		
 		// Test Number: TC07
