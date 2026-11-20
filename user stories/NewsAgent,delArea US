@@ -7,7 +7,7 @@ As an admin I want to delete users in case anyone is fired or retired.
 
 Delivery Area
 
-As a user I want tsero create address and classify them in delivery areas to organise deliveries more effectively.
+As a user I want to create address and classify them in delivery areas to organise deliveries more effectively.
 As a user I want to read addresses and delivery areas so I know where to send delivery persons
 As a user I want to update delivery areas and orders so that the system remains accurate when customers are moved or new customers are added
 As a user I want to delete delivery areas or addresses in case of cancelations of service
