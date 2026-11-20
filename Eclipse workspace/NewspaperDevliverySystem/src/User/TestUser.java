@@ -48,7 +48,7 @@ public class TestUser {
 	}
 
 	// Test Number: TC05
-	// Test Objective: Verify a valid user's name
+	// Test Objective:Verify valid user name
 	// Input(s): "John Doe"
 	// Expected Output: true
 	@Test
@@ -215,7 +215,7 @@ public class TestUser {
     // Test Number: TC20
     // Test Objective: Verify that a user account is updated by id
  	// Input(s): 2
- 	// Expected Output: name="John Smith", contact = 
+ 	// Expected Output: name="John Smith", contact = "0812345678"
     @Test
     void updateUserAccount_TC20() {
         User user = new User();
@@ -236,6 +236,23 @@ public class TestUser {
         assertEquals("John Smith", result.getName());
         assertEquals("0834567890", result.getContact());
         assertEquals("admin", result.getAccess_level());
+    }
+    
+    // Test Number: TC20
+    // Test Objective: Verify that a user account is deleted by id
+ 	// Input(s): delete user id 4
+ 	// Expected Output: name= null when read user id 4
+    @Test
+    void deleteUserAccount_TC21() {
+        User user = new User();
+
+        user.createUserAccount(
+            4, "Alex Smith", "password123",
+            "0812345678", "news agent"
+        );
+
+        assertTrue(user.deleteUserAccount(4));
+        assertNull(user.readUserAccount(4));
     }
 
     
